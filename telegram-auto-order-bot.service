@@ -1,0 +1,54 @@
+# ============================================================
+# Telegram Auto Order Bot — systemd Service
+# ============================================================
+# Instalasi:
+#   1. Salin file ini ke /etc/systemd/system/
+#      sudo cp telegram-auto-order-bot.service /etc/systemd/system/
+#
+#   2. Reload systemd:
+#      sudo systemctl daemon-reload
+#
+#   3. Enable dan start service:
+#      sudo systemctl enable telegram-auto-order-bot
+#      sudo systemctl start telegram-auto-order-bot
+#
+#   4. Cek status:
+#      sudo systemctl status telegram-auto-order-bot
+#
+#   5. Lihat log:
+#      sudo journalctl -u telegram-auto-order-bot -f
+#
+# ============================================================
+
+[Unit]
+Description=Telegram Auto Order Bot — Bot dengan pembayaran KlikQRIS
+Documentation=https://github.com/username/telegram-auto-order-bot
+After=network.target network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=bot
+Group=bot
+WorkingDirectory=/opt/telegram-auto-order-bot
+EnvironmentFile=/opt/telegram-auto-order-bot/.env
+ExecStart=/opt/telegram-auto-order-bot/venv/bin/python bot.py
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=always
+RestartSec=10
+
+# Hardening (opsional)
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/opt/telegram-auto-order-bot/data
+ReadOnlyPaths=/opt/telegram-auto-order-bot/config.yaml
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=telegram-auto-order-bot
+
+[Install]
+WantedBy=multi-user.target

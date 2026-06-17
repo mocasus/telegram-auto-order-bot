@@ -1,0 +1,160 @@
+# ============================================================
+# Telegram Auto Order Bot — Konfigurasi
+# ============================================================
+# Semua nilai di bawah ini dapat disesuaikan.
+# Untuk development, salin config.example.yaml ke config.yaml
+
+bot:
+  # Token Bot Telegram (dari @BotFather)
+  token: "YOUR_BOT_TOKEN_HERE"
+  # Nama bot (tampilan)
+  name: "AutoOrderBot"
+  # Username bot (tanpa @)
+  username: "AutoOrderBot"
+
+klikqris:
+  # API Key KlikQRIS
+  api_key: "YOUR_KLIKQRIS_API_KEY"
+  # Merchant ID
+  merchant_id: "YOUR_MERCHANT_ID"
+  # Mode: sandbox atau production
+  mode: sandbox
+  # Timeout request (detik)
+  timeout: 30
+  # Interval polling status pembayaran (detik)
+  polling_interval: 10
+  # Maksimum polling attempts (sebelum dianggap expired)
+  max_polling_attempts: 30
+
+database:
+  # Path ke file SQLite
+  path: "data/bot.db"
+
+webhook:
+  # Aktifkan webhook (false = polling)
+  enabled: false
+  # URL webhook (harus HTTPS)
+  url: "https://your-domain.com/webhook"
+  # Port untuk webhook server
+  port: 8443
+  # Path sertifikat SSL (opsional, untuk self-signed)
+  cert_path: ""
+  # Path private key SSL
+  key_path: ""
+
+admin:
+  # Telegram User ID admin (dapatkan dari @userinfobot)
+  user_id: 123456789
+  # Daftar admin tambahan
+  additional_ids: []
+
+toko:
+  # Nama toko
+  name: "Toko Online"
+  # Mata uang
+  currency: "IDR"
+  # Simbol mata uang
+  currency_symbol: "Rp"
+  # Biaya admin per transaksi (dalam rupiah)
+  admin_fee: 0
+  # PPN / pajak (persentase, 0-100)
+  tax_percent: 0
+
+pesan:
+  # Pesan sambutan (ganti dengan teks Anda sendiri)
+  start: |
+    👋 *Halo {nama}!*
+
+    Selamat datang di *{toko}*!
+    Silakan pilih menu di bawah ini:
+
+    🛍️ *Katalog* — Lihat produk kami
+    🛒 *Keranjang* — Lihat keranjang belanja
+    📦 *Pesanan Saya* — Lacak pesanan Anda
+    ℹ️ *Bantuan* — Pusat bantuan
+
+  bantuan: |
+    📖 *Pusat Bantuan*
+
+    🛍️ *Cara Belanja:*
+    1. Buka Katalog Produk
+    2. Pilih kategori dan produk
+    3. Tambahkan ke keranjang
+    4. Checkout dan lakukan pembayaran QRIS
+
+    💳 *Pembayaran:*
+    Kami menerima pembayaran melalui QRIS.
+    Setelah checkout, Anda akan menerima kode QR
+    yang dapat dipindai menggunakan aplikasi pembayaran
+    apa pun yang mendukung QRIS.
+
+    ⏱️ *Batas Waktu Pembayaran:*
+    Pembayaran harus diselesaikan dalam 30 menit
+    setelah checkout.
+
+    📞 *Butuh bantuan?*
+    Hubungi admin: @admin
+
+# ============================================================
+# Katalog Produk
+# ============================================================
+# Setiap produk memiliki: id, nama, harga, deskripsi, kategori, stok, emoji
+# Kategori: grup untuk mengelompokkan produk
+
+kategori:
+  - id: "makanan"
+    nama: "🍔 Makanan"
+    deskripsi: "Aneka makanan lezat"
+  - id: "minuman"
+    nama: "🥤 Minuman"
+    deskripsi: "Minuman segar"
+  - id: "digital"
+    nama: "💻 Produk Digital"
+    deskripsi: "Software, e-book, dan lainnya"
+  - id: "lainnya"
+    nama: "📦 Lainnya"
+    deskripsi: "Produk lainnya"
+
+produk:
+  - id: "nasi-goreng"
+    nama: "Nasi Goreng Spesial"
+    harga: 25000
+    deskripsi: "Nasi goreng dengan telur, ayam, dan kerupuk"
+    kategori: "makanan"
+    stok: 100
+    emoji: "🍛"
+  - id: "mie-ayam"
+    nama: "Mie Ayam Komplit"
+    harga: 20000
+    deskripsi: "Mie ayam dengan pangsit dan bakso"
+    kategori: "makanan"
+    stok: 80
+    emoji: "🍜"
+  - id: "es-teh"
+    nama: "Es Teh Manis"
+    harga: 5000
+    deskripsi: "Es teh manis segar"
+    kategori: "minuman"
+    stok: 200
+    emoji: "🧊"
+  - id: "kopi"
+    nama: "Kopi Susu Gula Aren"
+    harga: 15000
+    deskripsi: "Kopi susu kekinian dengan gula aren"
+    kategori: "minuman"
+    stok: 150
+    emoji: "☕"
+  - id: "ebook-python"
+    nama: "E-Book Python Mastery"
+    harga: 50000
+    deskripsi: "Buku digital Python dari dasar hingga mahir (PDF)"
+    kategori: "digital"
+    stok: 999
+    emoji: "📚"
+  - id: "template-website"
+    nama: "Template Website Premium"
+    harga: 75000
+    deskripsi: "Template website responsif siap pakai"
+    kategori: "digital"
+    stok: 999
+    emoji: "🌐"
