@@ -238,6 +238,20 @@ def get_message(key: str, **kwargs) -> str:
     return msg.format(**kwargs)
 
 
+def calculate_total(user_id: int) -> Tuple[int, int, int, int]:
+    """Hitung total, admin_fee, tax, dan grand_total dari keranjang.
+
+    Returns:
+        Tuple[total, admin_fee, tax, grand_total]
+    """
+    total = cart_total(user_id)
+    admin_fee = CONFIG.get("toko", {}).get("admin_fee", 0)
+    tax_percent = CONFIG.get("toko", {}).get("tax_percent", 0)
+    tax = int(total * tax_percent / 100)
+    grand = total + admin_fee + tax
+    return total, admin_fee, tax, grand
+
+
 def build_main_menu(user_id: int) -> InlineKeyboardMarkup:
     """Buat inline keyboard menu utama."""
     buttons = [
@@ -313,11 +327,7 @@ def build_cart_menu(user_id: int) -> InlineKeyboardMarkup:
 
     buttons.append([InlineKeyboardButton("🗑️ Kosongkan Keranjang", callback_data="cart:clear")])
 
-    total = cart_total(user_id)
-    admin_fee = CONFIG.get("toko", {}).get("admin_fee", 0)
-    tax_percent = CONFIG.get("toko", {}).get("tax_percent", 0)
-    tax = int(total * tax_percent / 100)
-    grand = total + admin_fee + tax
+    total, admin_fee, tax, grand = calculate_total(user_id)
 
     label = f"💳 Checkout — {format_rupiah(grand)}"
     buttons.append([InlineKeyboardButton(label, callback_data="checkout:start")])
@@ -331,11 +341,7 @@ def build_cart_menu(user_id: int) -> InlineKeyboardMarkup:
 
 def build_checkout_confirm(user_id: int) -> InlineKeyboardMarkup:
     """Buat inline keyboard konfirmasi checkout."""
-    total = cart_total(user_id)
-    admin_fee = CONFIG.get("toko", {}).get("admin_fee", 0)
-    tax_percent = CONFIG.get("toko", {}).get("tax_percent", 0)
-    tax = int(total * tax_percent / 100)
-    grand = total + admin_fee + tax
+    _, _, _, grand = calculate_total(user_id)
 
     buttons = [
         [InlineKeyboardButton(f"✅ Konfirmasi Pembayaran — {format_rupiah(grand)}", callback_data="checkout:confirm")],
@@ -506,6 +512,39 @@ async def handle_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 
+async def handle_help_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handler callback bantuan — gunakan callback_query, bukan message."""
+    query = update.callback_query
+    await query.answer()
+    text = """📖 *Pusat Bantuan*
+
+🛍️ *Cara Belanja:*
+1. Buka Katalog Produk
+2. Pilih kategori dan produk
+3. Tambahkan ke keranjang
+4. Checkout dan lakukan pembayaran QRIS
+
+💳 *Pembayaran:*
+Kami menerima pembayaran melalui QRIS.
+Setelah checkout, Anda akan menerima kode QR
+yang dapat dipindai menggunakan aplikasi pembayaran
+apa pun yang mendukung QRIS.
+
+⏱️ *Batas Waktu Pembayaran:*
+Pembayaran harus diselesaikan dalam 30 menit
+setelah checkout.
+
+📞 *Butuh bantuan?*
+Hubungi admin melalui menu Bantuan."""
+    await query.edit_message_text(
+        text,
+        parse_mode=ParseMode.MARKDOWN,
+        reply_markup=InlineKeyboardMarkup([[
+            InlineKeyboardButton("🏠 Menu Utama", callback_data="menu")
+        ]]),
+    )
+
+
 async def handle_catalog(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Tampilkan daftar kategori."""
     query = update.callback_query
@@ -534,9 +573,13 @@ async def handle_category(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
 
-    category_id = query.data.split(":", 1)[1]
-    category = get_database().get_category(category_id)
+    try:
+        category_id = query.data.split(":", 1)[1]
+    except (IndexError, ValueError):
+        await query.answer("Invalid kategori data!", show_alert=True)
+        return
 
+    category = get_database().get_category(category_id)
     if not category:
         await query.answer("Kategori tidak ditemukan!", show_alert=True)
         return
@@ -567,7 +610,11 @@ async def handle_product_detail(update: Update, context: ContextTypes.DEFAULT_TY
     query = update.callback_query
     await query.answer()
 
-    product_id = query.data.split(":", 1)[1]
+    try:
+        product_id = query.data.split(":", 1)[1]
+    except (IndexError, ValueError):
+        await query.answer("Invalid product data!", show_alert=True)
+        return
     product = get_database().get_product(product_id)
 
     if not product:
@@ -601,13 +648,26 @@ async def handle_cart_add(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Tambah produk ke keranjang."""
     query = update.callback_query
 
-    parts = query.data.split(":")
-    product_id = parts[2]
-    qty = int(parts[3])
+    try:
+        parts = query.data.split(":")
+        product_id = parts[2]
+        qty = int(parts[3])
+    except (IndexError, ValueError):
+        await query.answer("Invalid cart data!", show_alert=True)
+        return
 
     product = get_database().get_product(product_id)
     if not product:
         await query.answer("Produk tidak tersedia!", show_alert=True)
+        return
+
+    # Cek stok sebelum tambah ke keranjang
+    stock = product.get("stock", 0)
+    cart = get_cart(query.from_user.id)
+    current_in_cart = cart.get(product_id, {}).get("quantity", 0)
+
+    if qty > 0 and stock > 0 and current_in_cart + qty > stock:
+        await query.answer(f"⚠️ Stok tidak cukup! Tersedia: {stock}", show_alert=True)
         return
 
     if qty < 0:
@@ -678,7 +738,11 @@ async def handle_cart_remove(update: Update, context: ContextTypes.DEFAULT_TYPE)
     """Hapus produk dari keranjang."""
     query = update.callback_query
 
-    product_id = query.data.split(":", 2)[2]
+    try:
+        product_id = query.data.split(":", 2)[2]
+    except (IndexError, ValueError):
+        await query.answer("Invalid remove data!", show_alert=True)
+        return
     remove_from_cart(query.from_user.id, product_id)
 
     await query.answer("❌ Produk dihapus dari keranjang")
@@ -778,9 +842,7 @@ async def handle_checkout_confirm(update: Update, context: ContextTypes.DEFAULT_
     # Siapkan item
     items = cart_items(user_id)
 
-    # Simpan ke database
     d = get_database()
-    d.create_order(order_id, user_id, items, total, admin_fee, tax)
 
     # Buat pembayaran QRIS
     await query.edit_message_text(
@@ -805,6 +867,9 @@ async def handle_checkout_confirm(update: Update, context: ContextTypes.DEFAULT_
         qris_raw = qris_data.get("qris_data", "")
         payment_id = qris_data.get("payment_id", order_id)
 
+        # Simpan ke database — within transaction
+        d.create_order(order_id, user_id, items, total, admin_fee, tax)
+
         # Update order dengan info pembayaran
         d.update_order_payment(
             order_id=order_id,
@@ -826,7 +891,7 @@ async def handle_checkout_confirm(update: Update, context: ContextTypes.DEFAULT_
             qris_image=qris_image,
         )
 
-        # Kosongkan keranjang
+        # Hanya kosongkan keranjang setelah semua data tersimpan
         clear_cart(user_id)
 
         # Tampilkan QRIS
@@ -887,11 +952,13 @@ async def handle_checkout_confirm(update: Update, context: ContextTypes.DEFAULT_
 
     except KlikQRISError as e:
         logger.error("Gagal membuat QRIS: %s", e)
-        # Rollback: hapus order
-        d.update_order_status(order_id, "failed")
-        # Kembalikan stok
-        for item in items:
-            d.update_stock(item["product_id"], item["quantity"])
+        # Rollback: hapus order jika sudah dibuat
+        existing = d.get_order(order_id)
+        if existing:
+            d.update_order_status(order_id, "failed")
+            # Kembalikan stok
+            for item in items:
+                d.update_stock(item["product_id"], item["quantity"])
 
         await query.edit_message_text(
             f"❌ *Gagal membuat pembayaran*\n\nTerjadi kesalahan: {e}\n\nSilakan coba lagi nanti.",
@@ -986,7 +1053,11 @@ async def handle_payment_view(update: Update, context: ContextTypes.DEFAULT_TYPE
     query = update.callback_query
     await query.answer()
 
-    order_id = query.data.split(":", 1)[1]
+    try:
+        order_id = query.data.split(":", 1)[1]
+    except (IndexError, ValueError):
+        await query.answer("Invalid payment data!", show_alert=True)
+        return
 
     d = get_database()
     order = d.get_order(order_id)
@@ -1031,7 +1102,11 @@ async def handle_payment_check(update: Update, context: ContextTypes.DEFAULT_TYP
     query = update.callback_query
     await query.answer("🔄 Mengecek status...")
 
-    order_id = query.data.split(":", 2)[2]
+    try:
+        order_id = query.data.split(":", 2)[2]
+    except (IndexError, ValueError):
+        await query.answer("Invalid check data!", show_alert=True)
+        return
 
     try:
         klik = get_klikqris()
@@ -1143,12 +1218,21 @@ async def handle_order_detail(update: Update, context: ContextTypes.DEFAULT_TYPE
     query = update.callback_query
     await query.answer()
 
-    order_id = query.data.split(":", 1)[1]
+    try:
+        order_id = query.data.split(":", 1)[1]
+    except (IndexError, ValueError):
+        await query.answer("Invalid order data!", show_alert=True)
+        return
     d = get_database()
     order = d.get_order(order_id)
 
     if not order:
         await query.answer("Pesanan tidak ditemukan!", show_alert=True)
+        return
+
+    user_id = query.from_user.id
+    if order["user_id"] != user_id and not is_admin(user_id):
+        await query.answer("Akses ditolak! Ini bukan pesanan Anda.", show_alert=True)
         return
 
     status_emoji = {
@@ -1192,8 +1276,6 @@ async def handle_order_detail(update: Update, context: ContextTypes.DEFAULT_TYPE
     if order.get("paid_at"):
         lines.append(f"✅ Dibayar: {order['paid_at']}")
 
-    user_id = query.from_user.id
-
     await query.edit_message_text(
         "\n".join(lines),
         parse_mode=ParseMode.MARKDOWN,
@@ -1230,7 +1312,11 @@ async def handle_admin_orders(update: Update, context: ContextTypes.DEFAULT_TYPE
         await query.answer("Akses ditolak!", show_alert=True)
         return
 
-    parts = query.data.split(":")
+    try:
+        parts = query.data.split(":")
+    except (IndexError, ValueError):
+        await query.answer("Invalid admin orders data!", show_alert=True)
+        return
     status = None
     page = 0
 
@@ -1476,7 +1562,7 @@ async def admin_add_product_confirm(update: Update, context: ContextTypes.DEFAUL
         import random
         import string
 
-        pid = prod["name"].lower().replace(" ", "-")[:30]
+        pid = re.sub(r'[^a-z0-9_-]', '', prod["name"].lower().replace(" ", "-")[:30])
 
         d = get_database()
         d.conn.execute(
@@ -1607,9 +1693,7 @@ def build_application() -> Application:
     app.add_handler(CallbackQueryHandler(handle_product_detail, pattern="^prod:"))
 
     # Bantuan
-    app.add_handler(CallbackQueryHandler(
-        lambda u, c: cmd_help(u, c), pattern="^help$"
-    ))
+    app.add_handler(CallbackQueryHandler(handle_help_callback, pattern="^help$"))
 
     # Keranjang
     app.add_handler(CallbackQueryHandler(handle_cart_add, pattern="^cart:add:"))

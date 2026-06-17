@@ -1,0 +1,157 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" width="1200" height="600">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0d1117"/>
+      <stop offset="100%" stop-color="#0d1117"/>
+    </linearGradient>
+    <linearGradient id="boxBlue" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a3a5c"/>
+      <stop offset="100%" stop-color="#162d4a"/>
+    </linearGradient>
+    <linearGradient id="boxGreen" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0d3326"/>
+      <stop offset="100%" stop-color="#0a281e"/>
+    </linearGradient>
+    <linearGradient id="boxOrange" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3d1f10"/>
+      <stop offset="100%" stop-color="#331a0d"/>
+    </linearGradient>
+    <linearGradient id="boxSlate" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1c2130"/>
+      <stop offset="100%" stop-color="#161b25"/>
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000" flood-opacity="0.5"/>
+    </filter>
+    <marker id="arrowBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#26A5E4"/>
+    </marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#00A86B"/>
+    </marker>
+    <marker id="arrowOrange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#FF6B35"/>
+    </marker>
+    <marker id="arrowGray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#8b949e"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="600" fill="url(#bgGrad)"/>
+  <rect x="0" y="0" width="1200" height="600" rx="0" fill="none" stroke="#30363d" stroke-width="1"/>
+
+  <!-- Title -->
+  <text x="600" y="42" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="24" font-weight="700" fill="#c9d1d9">System Architecture</text>
+  <text x="600" y="62" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="13" fill="#8b949e">Telegram Auto Order Bot — QRIS Payment System</text>
+  <line x1="450" y1="72" x2="750" y2="72" stroke="#30363d" stroke-width="1"/>
+
+  <!-- ========== ROW 1: User Layer ========== -->
+  <!-- Telegram User -->
+  <rect x="60" y="100" width="180" height="100" rx="12" fill="#1c2130" stroke="#30363d" stroke-width="1.5" filter="url(#shadow)"/>
+  <rect x="60" y="100" width="180" height="28" rx="12" fill="#26A5E4" opacity="0.15"/>
+  <rect x="60" y="116" width="180" height="12" fill="#26A5E4" opacity="0.15"/>
+  <text x="150" y="119" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="13" font-weight="600" fill="#26A5E4">📱 Telegram User</text>
+  <text x="150" y="150" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#8b949e">Customer sends</text>
+  <text x="150" y="168" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#8b949e">commands &amp; callbacks</text>
+  <text x="150" y="186" text-anchor="middle" font-family="monospace" font-size="10" fill="#8b949e">/start · /bantuan · inline</text>
+
+  <!-- Arrow: User → Bot -->
+  <line x1="240" y1="150" x2="320" y2="150" stroke="#26A5E4" stroke-width="2" marker-end="url(#arrowBlue)"/>
+  <text x="280" y="140" text-anchor="middle" font-family="monospace" font-size="10" fill="#26A5E4" opacity="0.8">Telegram API</text>
+
+  <!-- ========== Bot (python-telegram-bot) ========== -->
+  <rect x="330" y="100" width="220" height="100" rx="12" fill="url(#boxBlue)" stroke="#26A5E4" stroke-width="2" filter="url(#shadow)"/>
+  <rect x="330" y="100" width="220" height="28" rx="12" fill="#26A5E4" opacity="0.12"/>
+  <rect x="330" y="116" width="220" height="12" fill="#26A5E4" opacity="0.12"/>
+  <text x="440" y="119" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="13" font-weight="600" fill="#26A5E4">🤖 Bot (python-telegram-bot)</text>
+  <text x="440" y="150" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#c9d1d9">Handler · Conversation</text>
+  <text x="440" y="168" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#c9d1d9">Inline Keyboard · State Mgmt</text>
+  <text x="440" y="186" text-anchor="middle" font-family="monospace" font-size="10" fill="#8b949e">v22+ · Async · Polling</text>
+
+  <!-- Arrow: Bot → DB -->
+  <line x1="550" y1="150" x2="650" y2="150" stroke="#FF6B35" stroke-width="2" marker-end="url(#arrowOrange)"/>
+  <text x="600" y="140" text-anchor="middle" font-family="monospace" font-size="10" fill="#FF6B35" opacity="0.8">SQL Queries</text>
+
+  <!-- ========== Database (SQLite) ========== -->
+  <rect x="660" y="100" width="220" height="100" rx="12" fill="url(#boxOrange)" stroke="#FF6B35" stroke-width="2" filter="url(#shadow)"/>
+  <rect x="660" y="100" width="220" height="28" rx="12" fill="#FF6B35" opacity="0.12"/>
+  <rect x="660" y="116" width="220" height="12" fill="#FF6B35" opacity="0.12"/>
+  <text x="770" y="119" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="13" font-weight="600" fill="#FF6B35">🗄️ Database (SQLite)</text>
+  <text x="770" y="150" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#c9d1d9">Users · Products · Orders</text>
+  <text x="770" y="168" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#c9d1d9">Cart State · Transactions</text>
+  <text x="770" y="186" text-anchor="middle" font-family="monospace" font-size="10" fill="#8b949e">data/bot.db</text>
+
+  <!-- Arrow: DB → KlikQRIS -->
+  <line x1="880" y1="150" x2="960" y2="150" stroke="#00A86B" stroke-width="2" marker-end="url(#arrowGreen)"/>
+  <text x="920" y="140" text-anchor="middle" font-family="monospace" font-size="10" fill="#00A86B" opacity="0.8">API Request</text>
+
+  <!-- ========== KlikQRIS API ========== -->
+  <rect x="970" y="100" width="200" height="100" rx="12" fill="url(#boxGreen)" stroke="#00A86B" stroke-width="2" filter="url(#shadow)"/>
+  <rect x="970" y="100" width="200" height="28" rx="12" fill="#00A86B" opacity="0.12"/>
+  <rect x="970" y="116" width="200" height="12" fill="#00A86B" opacity="0.12"/>
+  <text x="1070" y="119" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="13" font-weight="600" fill="#00A86B">💳 KlikQRIS API</text>
+  <text x="1070" y="150" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#c9d1d9">Create Invoice · QR Code</text>
+  <text x="1070" y="168" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#c9d1d9">Payment Status · History</text>
+  <text x="1070" y="186" text-anchor="middle" font-family="monospace" font-size="10" fill="#8b949e">REST HTTPS API</text>
+
+  <!-- ========== ROW 2: Flow Directions ========== -->
+
+  <!-- Down arrow: Bot → Webhook -->
+  <path d="M440 200 L440 280" stroke="#8b949e" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arrowGray)"/>
+
+  <!-- Webhook Callback (below Bot) -->
+  <rect x="380" y="290" width="120" height="75" rx="10" fill="#1c2130" stroke="#8b949e" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="440" y="316" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="12" font-weight="600" fill="#c9d1d9">📡 Webhook</text>
+  <text x="440" y="334" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="10" fill="#8b949e">Callback Listener</text>
+  <text x="440" y="352" text-anchor="middle" font-family="monospace" font-size="9" fill="#8b949e">HTTPS Endpoint</text>
+
+  <!-- KlikQRIS → Webhook arrow (curved) -->
+  <path d="M1070 200 L1070 270 Q1070 327 980 327 L500 327" stroke="#00A86B" stroke-width="2" stroke-dasharray="8,4" fill="none" marker-end="url(#arrowGreen)"/>
+  <text x="785" y="350" text-anchor="middle" font-family="monospace" font-size="10" fill="#00A86B" opacity="0.8">Payment Notification (Async)</text>
+
+  <!-- ========== ROW 3: Details ========== -->
+
+  <!-- Admin section -->
+  <rect x="60" y="420" width="330" height="145" rx="10" fill="#161b22" stroke="#30363d" stroke-width="1" filter="url(#shadow)"/>
+  <rect x="60" y="420" width="330" height="28" rx="10" fill="#30363d" opacity="0.3"/>
+  <rect x="60" y="438" width="330" height="10" fill="#30363d" opacity="0.3"/>
+  <text x="225" y="440" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="12" font-weight="600" fill="#c9d1d9">⚙️ Admin Panel</text>
+  <text x="80" y="472" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#8b949e">• View all orders &amp; status filters</text>
+  <text x="80" y="492" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#8b949e">• Add/Edit products via conversation</text>
+  <text x="80" y="512" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#8b949e">• Store summary (revenue, totals)</text>
+  <text x="80" y="532" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#8b949e">• Admin-only access (user_id check)</text>
+  <text x="80" y="552" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#8b949e">• Docker + systemd deployment</text>
+
+  <!-- State Management -->
+  <rect x="430" y="420" width="330" height="145" rx="10" fill="#161b22" stroke="#30363d" stroke-width="1" filter="url(#shadow)"/>
+  <rect x="430" y="420" width="330" height="28" rx="10" fill="#30363d" opacity="0.3"/>
+  <rect x="430" y="438" width="330" height="10" fill="#30363d" opacity="0.3"/>
+  <text x="595" y="440" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="12" font-weight="600" fill="#c9d1d9">🔄 Payment Flow</text>
+  <text x="450" y="472" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#8b949e">• Cart: In-memory dict per user</text>
+  <text x="450" y="492" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#8b949e">• Checkout → KlikQRIS create invoice</text>
+  <text x="450" y="512" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#8b949e">• QR Code displayed to user in chat</text>
+  <text x="450" y="532" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#8b949e">• Polling: 10s interval, 30 attempts</text>
+  <text x="450" y="552" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#8b949e">• Webhook: Instant callback notification</text>
+
+  <!-- Configuration -->
+  <rect x="800" y="420" width="370" height="145" rx="10" fill="#161b22" stroke="#30363d" stroke-width="1" filter="url(#shadow)"/>
+  <rect x="800" y="420" width="370" height="28" rx="10" fill="#30363d" opacity="0.3"/>
+  <rect x="800" y="438" width="370" height="10" fill="#30363d" opacity="0.3"/>
+  <text x="985" y="440" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="12" font-weight="600" fill="#c9d1d9">🔧 Configuration</text>
+  <text x="820" y="472" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#8b949e">• config.yaml (YAML + env var substitution)</text>
+  <text x="820" y="492" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#8b949e">• Bot token, KlikQRIS keys, store settings</text>
+  <text x="820" y="512" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#8b949e">• Products &amp; categories defined in config</text>
+  <text x="820" y="532" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#8b949e">• Sandbox / Production mode toggle</text>
+  <text x="820" y="552" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#8b949e">• Custom messages in Bahasa Indonesia</text>
+
+  <!-- Legend -->
+  <rect x="995" y="25" width="170" height="58" rx="6" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+  <text x="1080" y="42" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="10" font-weight="600" fill="#8b949e">LEGEND</text>
+  <line x1="1005" y1="50" x2="1040" y2="50" stroke="#26A5E4" stroke-width="2"/>
+  <text x="1045" y="54" font-family="'Segoe UI', Arial, sans-serif" font-size="9" fill="#26A5E4">Telegram</text>
+  <line x1="1005" y1="64" x2="1040" y2="64" stroke="#00A86B" stroke-width="2"/>
+  <text x="1045" y="68" font-family="'Segoe UI', Arial, sans-serif" font-size="9" fill="#00A86B">QRIS/Payment</text>
+  <line x1="1005" y1="78" x2="1040" y2="78" stroke="#FF6B35" stroke-width="2"/>
+  <text x="1045" y="82" font-family="'Segoe UI', Arial, sans-serif" font-size="9" fill="#FF6B35">Database</text>
+</svg>

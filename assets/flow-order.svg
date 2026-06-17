@@ -1,0 +1,156 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 500" width="1200" height="500">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0d1117"/>
+      <stop offset="100%" stop-color="#0d1117"/>
+    </linearGradient>
+    <linearGradient id="stepBlue" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a3a5c"/>
+      <stop offset="100%" stop-color="#162d4a"/>
+    </linearGradient>
+    <linearGradient id="stepGreen" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0d3326"/>
+      <stop offset="100%" stop-color="#0a281e"/>
+    </linearGradient>
+    <linearGradient id="stepOrange" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3d1f10"/>
+      <stop offset="100%" stop-color="#331a0d"/>
+    </linearGradient>
+    <linearGradient id="stepSlate" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1c2130"/>
+      <stop offset="100%" stop-color="#161b25"/>
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000" flood-opacity="0.4"/>
+    </filter>
+    <marker id="arrowFlow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#c9d1d9"/>
+    </marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#00A86B"/>
+    </marker>
+    <marker id="arrowBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#26A5E4"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="500" fill="url(#bgGrad)"/>
+  <rect x="0" y="0" width="1200" height="500" fill="none" stroke="#30363d" stroke-width="1"/>
+
+  <!-- Title -->
+  <text x="40" y="35" font-family="'Segoe UI', Arial, sans-serif" font-size="22" font-weight="700" fill="#c9d1d9">Order Flow</text>
+  <text x="40" y="52" font-family="'Segoe UI', Arial, sans-serif" font-size="12" fill="#8b949e">Customer purchase journey from browsing to order completion</text>
+  <line x1="40" y1="62" x2="300" y2="62" stroke="#30363d" stroke-width="1"/>
+
+  <!-- ========== STEP 1: Browse Catalog ========== -->
+  <rect x="40" y="85" width="145" height="120" rx="12" fill="#1c2130" stroke="#30363d" stroke-width="1.5" filter="url(#shadow)"/>
+  <circle cx="112" cy="108" r="16" fill="#26A5E4" opacity="0.2"/>
+  <text x="112" y="113" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="14" fill="#26A5E4">1</text>
+  <text x="112" y="150" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="13" font-weight="600" fill="#c9d1d9">🛍️ Browse Catalog</text>
+  <text x="112" y="172" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="10" fill="#8b949e">Select category</text>
+  <text x="112" y="188" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="10" fill="#8b949e">View product list</text>
+
+  <!-- Arrow 1→2 -->
+  <line x1="185" y1="145" x2="217" y2="145" stroke="#c9d1d9" stroke-width="2" marker-end="url(#arrowFlow)"/>
+
+  <!-- ========== STEP 2: Add to Cart ========== -->
+  <rect x="222" y="85" width="145" height="120" rx="12" fill="url(#stepBlue)" stroke="#26A5E4" stroke-width="1.5" filter="url(#shadow)"/>
+  <circle cx="294" cy="108" r="16" fill="#26A5E4" opacity="0.25"/>
+  <text x="294" y="113" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="14" fill="#26A5E4">2</text>
+  <text x="294" y="150" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="13" font-weight="600" fill="#c9d1d9">🛒 Add to Cart</text>
+  <text x="294" y="172" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="10" fill="#8b949e">Select product</text>
+  <text x="294" y="188" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="10" fill="#8b949e">Adjust quantity</text>
+
+  <!-- Arrow 2→3 -->
+  <line x1="367" y1="145" x2="399" y2="145" stroke="#c9d1d9" stroke-width="2" marker-end="url(#arrowFlow)"/>
+
+  <!-- ========== STEP 3: Checkout ========== -->
+  <rect x="404" y="85" width="145" height="120" rx="12" fill="url(#stepOrange)" stroke="#FF6B35" stroke-width="1.5" filter="url(#shadow)"/>
+  <circle cx="476" cy="108" r="16" fill="#FF6B35" opacity="0.25"/>
+  <text x="476" y="113" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="14" fill="#FF6B35">3</text>
+  <text x="476" y="150" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="13" font-weight="600" fill="#c9d1d9">💳 Checkout</text>
+  <text x="476" y="172" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="10" fill="#8b949e">Review cart</text>
+  <text x="476" y="188" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="10" fill="#8b949e">Confirm order</text>
+
+  <!-- Arrow 3→4 -->
+  <line x1="549" y1="145" x2="581" y2="145" stroke="#c9d1d9" stroke-width="2" marker-end="url(#arrowFlow)"/>
+
+  <!-- ========== STEP 4: Generate QRIS ========== -->
+  <rect x="586" y="85" width="145" height="120" rx="12" fill="url(#stepGreen)" stroke="#00A86B" stroke-width="2" filter="url(#shadow)"/>
+  <circle cx="658" cy="108" r="16" fill="#00A86B" opacity="0.25"/>
+  <text x="658" y="113" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="14" fill="#00A86B">4</text>
+  <text x="658" y="150" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="13" font-weight="600" fill="#c9d1d9">⬡ Generate QRIS</text>
+  <text x="658" y="172" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="10" fill="#8b949e">Create invoice</text>
+  <text x="658" y="188" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="10" fill="#8b949e">Show QR code</text>
+
+  <!-- Arrow 4→5 -->
+  <line x1="731" y1="145" x2="763" y2="145" stroke="#c9d1d9" stroke-width="2" marker-end="url(#arrowFlow)"/>
+
+  <!-- ========== STEP 5: Payment ========== -->
+  <rect x="768" y="85" width="145" height="120" rx="12" fill="url(#stepGreen)" stroke="#00A86B" stroke-width="1.5" filter="url(#shadow)"/>
+  <circle cx="840" cy="108" r="16" fill="#00A86B" opacity="0.25"/>
+  <text x="840" y="113" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="14" fill="#00A86B">5</text>
+  <text x="840" y="150" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="13" font-weight="600" fill="#c9d1d9">💰 Payment</text>
+  <text x="840" y="172" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="10" fill="#8b949e">Customer scans</text>
+  <text x="840" y="188" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="10" fill="#8b949e">Pays via QRIS</text>
+
+  <!-- Arrow 5→6 -->
+  <line x1="913" y1="145" x2="945" y2="145" stroke="#c9d1d9" stroke-width="2" marker-end="url(#arrowFlow)"/>
+
+  <!-- ========== STEP 6: Webhook ========== -->
+  <rect x="950" y="85" width="145" height="120" rx="12" fill="#1c2130" stroke="#30363d" stroke-width="1.5" filter="url(#shadow)"/>
+  <circle cx="1022" cy="108" r="16" fill="#8b949e" opacity="0.2"/>
+  <text x="1022" y="113" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="14" fill="#c9d1d9">6</text>
+  <text x="1022" y="150" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="13" font-weight="600" fill="#c9d1d9">📡 Webhook</text>
+  <text x="1022" y="172" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="10" fill="#8b949e">Receive callback</text>
+  <text x="1022" y="188" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="10" fill="#8b949e">Verify payment</text>
+
+  <!-- Arrow 6→7 (curved down) -->
+  <path d="M1022 205 L1022 270 Q1022 310 840 310 L658 310" stroke="#c9d1d9" stroke-width="2" fill="none" marker-end="url(#arrowFlow)"/>
+
+  <!-- ========== STEP 7: Order Complete ========== -->
+  <rect x="513" y="295" width="290" height="100" rx="12" fill="url(#stepSlate)" stroke="#FF6B35" stroke-width="2" filter="url(#shadow)"/>
+  <!-- Success check -->
+  <circle cx="658" cy="345" r="20" fill="#00A86B" opacity="0.2"/>
+  <path d="M648 345 L655 352 L668 338" fill="none" stroke="#00A86B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="710" y="338" font-family="'Segoe UI', Arial, sans-serif" font-size="15" font-weight="700" fill="#00A86B">✅ Order Complete</text>
+  <text x="710" y="358" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#c9d1d9">Update order status → PAID</text>
+  <text x="710" y="378" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#8b949e">Notify customer · Save to history</text>
+
+  <circle cx="658" cy="310" r="14" fill="#FF6B35" opacity="0.25"/>
+  <text x="658" y="315" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="12" fill="#FF6B35">7</text>
+
+  <!-- ========== Side panel: Details ========== -->
+  <rect x="40" y="295" width="290" height="100" rx="12" fill="#161b22" stroke="#30363d" stroke-width="1" filter="url(#shadow)"/>
+  <text x="60" y="320" font-family="'Segoe UI', Arial, sans-serif" font-size="12" font-weight="600" fill="#c9d1d9">⏱️ Important Details</text>
+  <line x1="60" y1="328" x2="310" y2="328" stroke="#30363d" stroke-width="0.5"/>
+  <text x="60" y="348" font-family="'Segoe UI', Arial, sans-serif" font-size="10" fill="#8b949e">• Payment timeout: 30 minutes</text>
+  <text x="60" y="366" font-family="'Segoe UI', Arial, sans-serif" font-size="10" fill="#8b949e">• Polling interval: 10 seconds</text>
+  <text x="60" y="384" font-family="'Segoe UI', Arial, sans-serif" font-size="10" fill="#8b949e">• Auto-cancel if unpaid</text>
+
+  <!-- ========== Bottom row: Status indicators ========== -->
+  <rect x="40" y="430" width="1100" height="50" rx="8" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+
+  <!-- Status badges -->
+  <rect x="60" y="442" width="130" height="26" rx="13" fill="#26A5E4" opacity="0.15"/>
+  <text x="125" y="460" text-anchor="middle" font-family="monospace" font-size="11" fill="#26A5E4">↻ Browse</text>
+
+  <rect x="210" y="442" width="130" height="26" rx="13" fill="#26A5E4" opacity="0.15"/>
+  <text x="275" y="460" text-anchor="middle" font-family="monospace" font-size="11" fill="#26A5E4">⊕ Cart</text>
+
+  <rect x="360" y="442" width="130" height="26" rx="13" fill="#FF6B35" opacity="0.15"/>
+  <text x="425" y="460" text-anchor="middle" font-family="monospace" font-size="11" fill="#FF6B35">⏳ Pending</text>
+
+  <rect x="510" y="442" width="130" height="26" rx="13" fill="#00A86B" opacity="0.15"/>
+  <text x="575" y="460" text-anchor="middle" font-family="monospace" font-size="11" fill="#00A86B">⬡ QRIS Live</text>
+
+  <rect x="660" y="442" width="130" height="26" rx="13" fill="#00A86B" opacity="0.15"/>
+  <text x="725" y="460" text-anchor="middle" font-family="monospace" font-size="11" fill="#00A86B">⌛ Waiting</text>
+
+  <rect x="810" y="442" width="130" height="26" rx="13" fill="#8b949e" opacity="0.15"/>
+  <text x="875" y="460" text-anchor="middle" font-family="monospace" font-size="11" fill="#8b949e">📡 Callback</text>
+
+  <rect x="960" y="442" width="160" height="26" rx="13" fill="#00A86B" opacity="0.2"/>
+  <text x="1040" y="460" text-anchor="middle" font-family="monospace" font-size="11" fill="#00A86B">✓ Completed</text>
+</svg>

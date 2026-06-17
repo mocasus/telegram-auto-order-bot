@@ -1,0 +1,229 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 620" width="1100" height="620">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0d1117"/>
+      <stop offset="100%" stop-color="#0d1117"/>
+    </linearGradient>
+    <linearGradient id="boxGreen" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0d3326"/>
+      <stop offset="100%" stop-color="#0a281e"/>
+    </linearGradient>
+    <linearGradient id="boxBlue" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a3a5c"/>
+      <stop offset="100%" stop-color="#162d4a"/>
+    </linearGradient>
+    <linearGradient id="boxOrange" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3d1f10"/>
+      <stop offset="100%" stop-color="#331a0d"/>
+    </linearGradient>
+    <linearGradient id="boxSlate" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1c2130"/>
+      <stop offset="100%" stop-color="#161b25"/>
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000" flood-opacity="0.4"/>
+    </filter>
+    <filter id="glowGreen">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <marker id="arrowFlow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#c9d1d9"/>
+    </marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#00A86B"/>
+    </marker>
+    <marker id="arrowOrange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#FF6B35"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1100" height="620" fill="url(#bgGrad)"/>
+  <rect x="0" y="0" width="1100" height="620" fill="none" stroke="#30363d" stroke-width="1"/>
+
+  <!-- Title -->
+  <text x="40" y="38" font-family="'Segoe UI', Arial, sans-serif" font-size="22" font-weight="700" fill="#c9d1d9">Payment Flow</text>
+  <text x="40" y="56" font-family="'Segoe UI', Arial, sans-serif" font-size="12" fill="#8b949e">KlikQRIS payment lifecycle from invoice creation to status update</text>
+  <line x1="40" y1="66" x2="330" y2="66" stroke="#30363d" stroke-width="1"/>
+
+  <!-- ========== STEP 1: Create Invoice ========== -->
+  <g transform="translate(40, 90)">
+    <rect x="0" y="0" width="220" height="130" rx="14" fill="url(#boxGreen)" stroke="#00A86B" stroke-width="2" filter="url(#shadow)"/>
+    <rect x="0" y="0" width="220" height="30" rx="14" fill="#00A86B" opacity="0.12"/>
+    <rect x="0" y="18" width="220" height="12" fill="#00A86B" opacity="0.12"/>
+    <circle cx="24" cy="20" r="12" fill="#00A86B" opacity="0.3"/>
+    <text x="24" y="25" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="13" font-weight="700" fill="#00A86B">1</text>
+    <text x="134" y="23" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="13" font-weight="600" fill="#00A86B">📝 Create Invoice</text>
+
+    <text x="15" y="52" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#c9d1d9">POST /v1/qris/create</text>
+    <line x1="15" y1="58" x2="205" y2="58" stroke="#30363d" stroke-width="0.5"/>
+
+    <text x="15" y="76" font-family="monospace" font-size="10" fill="#8b949e">order_id : ORD-xxx</text>
+    <text x="15" y="93" font-family="monospace" font-size="10" fill="#8b949e">amount   : Rp 50,000</text>
+    <text x="15" y="110" font-family="monospace" font-size="10" fill="#8b949e">status   : pending</text>
+    <text x="15" y="127" font-family="monospace" font-size="10" fill="#00A86B">qr_url   : qris://...</text>
+  </g>
+
+  <!-- Arrow 1→2 -->
+  <line x1="260" y1="155" x2="320" y2="155" stroke="#c9d1d9" stroke-width="2" marker-end="url(#arrowFlow)"/>
+
+  <!-- ========== STEP 2: Show QR Code ========== -->
+  <g transform="translate(325, 90)">
+    <rect x="0" y="0" width="220" height="130" rx="14" fill="url(#boxBlue)" stroke="#26A5E4" stroke-width="2" filter="url(#shadow)"/>
+    <rect x="0" y="0" width="220" height="30" rx="14" fill="#26A5E4" opacity="0.12"/>
+    <rect x="0" y="18" width="220" height="12" fill="#26A5E4" opacity="0.12"/>
+    <circle cx="24" cy="20" r="12" fill="#26A5E4" opacity="0.3"/>
+    <text x="24" y="25" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="13" font-weight="700" fill="#26A5E4">2</text>
+    <text x="134" y="23" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="13" font-weight="600" fill="#26A5E4">⬡ Show QR Code</text>
+
+    <text x="15" y="52" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#c9d1d9">Display QR in Telegram</text>
+    <line x1="15" y1="58" x2="205" y2="58" stroke="#30363d" stroke-width="0.5"/>
+
+    <!-- Mini QR code graphic -->
+    <rect x="25" y="68" width="40" height="40" rx="5" fill="#0d1117" stroke="#00A86B" stroke-width="1.5"/>
+    <rect x="29" y="72" width="8" height="8" rx="2" fill="#00A86B" opacity="0.8"/>
+    <rect x="53" y="72" width="8" height="8" rx="2" fill="#00A86B" opacity="0.8"/>
+    <rect x="29" y="96" width="8" height="8" rx="2" fill="#00A86B" opacity="0.8"/>
+    <rect x="41" y="72" width="4" height="4" fill="#00A86B" opacity="0.5"/>
+    <rect x="49" y="84" width="4" height="4" fill="#00A86B" opacity="0.5"/>
+    <rect x="29" y="84" width="4" height="4" fill="#00A86B" opacity="0.5"/>
+    <rect x="57" y="88" width="4" height="4" fill="#00A86B" opacity="0.5"/>
+    <rect x="41" y="92" width="4" height="4" fill="#00A86B" opacity="0.5"/>
+
+    <text x="80" y="82" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#8b949e">Scan QRIS</text>
+    <text x="80" y="98" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#8b949e">with any app</text>
+
+    <text x="15" y="124" font-family="monospace" font-size="10" fill="#26A5E4">expires_in : 30 min</text>
+  </g>
+
+  <!-- Arrow 2→3 -->
+  <line x1="545" y1="155" x2="605" y2="155" stroke="#c9d1d9" stroke-width="2" marker-end="url(#arrowFlow)"/>
+
+  <!-- ========== STEP 3: Customer Pays ========== -->
+  <g transform="translate(610, 90)">
+    <rect x="0" y="0" width="220" height="130" rx="14" fill="url(#boxOrange)" stroke="#FF6B35" stroke-width="2" filter="url(#shadow)"/>
+    <rect x="0" y="0" width="220" height="30" rx="14" fill="#FF6B35" opacity="0.12"/>
+    <rect x="0" y="18" width="220" height="12" fill="#FF6B35" opacity="0.12"/>
+    <circle cx="24" cy="20" r="12" fill="#FF6B35" opacity="0.3"/>
+    <text x="24" y="25" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="13" font-weight="700" fill="#FF6B35">3</text>
+    <text x="134" y="23" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="13" font-weight="600" fill="#FF6B35">💰 Customer Pays</text>
+
+    <text x="15" y="52" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#c9d1d9">Payment processed</text>
+    <line x1="15" y1="58" x2="205" y2="58" stroke="#30363d" stroke-width="0.5"/>
+
+    <!-- Payment icons -->
+    <rect x="25" y="70" width="50" height="50" rx="8" fill="#0d1117" stroke="#30363d" stroke-width="1"/>
+    <text x="50" y="92" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="9" fill="#8b949e">GoPay</text>
+    <rect x="85" y="70" width="50" height="50" rx="8" fill="#0d1117" stroke="#30363d" stroke-width="1"/>
+    <text x="110" y="92" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="9" fill="#8b949e">OVO</text>
+    <rect x="145" y="70" width="50" height="50" rx="8" fill="#0d1117" stroke="#30363d" stroke-width="1"/>
+    <text x="170" y="92" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="9" fill="#8b949e">DANA</text>
+
+    <text x="110" y="124" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="10" fill="#FF6B35">Any QRIS-supported app</text>
+  </g>
+
+  <!-- Arrow 3→4 (down onto branch) -->
+  <path d="M720 220 L720 270" stroke="#c9d1d9" stroke-width="2" fill="none" marker-end="url(#arrowFlow)"/>
+
+  <!-- Branch label -->
+  <text x="740" y="250" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="600" fill="#8b949e">Dual verification</text>
+
+  <!-- ========== STEP 4a: Polling (left branch) ========== -->
+  <g transform="translate(450, 280)">
+    <rect x="0" y="0" width="200" height="110" rx="12" fill="url(#boxSlate)" stroke="#8b949e" stroke-width="1.5" filter="url(#shadow)"/>
+    <rect x="0" y="0" width="200" height="28" rx="12" fill="#8b949e" opacity="0.1"/>
+    <rect x="0" y="16" width="200" height="12" fill="#8b949e" opacity="0.1"/>
+    <circle cx="22" cy="18" r="10" fill="#8b949e" opacity="0.2"/>
+    <text x="22" y="23" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="700" fill="#8b949e">4a</text>
+    <text x="114" y="22" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="12" font-weight="600" fill="#c9d1d9">🔄 Polling</text>
+
+    <text x="15" y="50" font-family="'Segoe UI', Arial, sans-serif" font-size="10" fill="#8b949e">GET /v1/qris/status/{id}</text>
+    <text x="15" y="68" font-family="'Segoe UI', Arial, sans-serif" font-size="10" fill="#8b949e">Every 10 seconds</text>
+    <text x="15" y="86" font-family="'Segoe UI', Arial, sans-serif" font-size="10" fill="#8b949e">Max 30 attempts</text>
+    <text x="15" y="104" font-family="monospace" font-size="9" fill="#8b949e">Timeout → auto-cancel</text>
+  </g>
+
+  <!-- ========== STEP 4b: Webhook (right branch) ========== -->
+  <g transform="translate(680, 280)">
+    <rect x="0" y="0" width="200" height="110" rx="12" fill="url(#boxGreen)" stroke="#00A86B" stroke-width="1.5" filter="url(#shadow)"/>
+    <rect x="0" y="0" width="200" height="28" rx="12" fill="#00A86B" opacity="0.1"/>
+    <rect x="0" y="16" width="200" height="12" fill="#00A86B" opacity="0.1"/>
+    <circle cx="22" cy="18" r="10" fill="#00A86B" opacity="0.2"/>
+    <text x="22" y="23" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="700" fill="#00A86B">4b</text>
+    <text x="114" y="22" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="12" font-weight="600" fill="#00A86B">📡 Webhook</text>
+
+    <text x="15" y="50" font-family="'Segoe UI', Arial, sans-serif" font-size="10" fill="#8b949e">POST callback URL</text>
+    <text x="15" y="68" font-family="'Segoe UI', Arial, sans-serif" font-size="10" fill="#8b949e">Instant notification</text>
+    <text x="15" y="86" font-family="'Segoe UI', Arial, sans-serif" font-size="10" fill="#8b949e">Verify signature</text>
+    <text x="15" y="104" font-family="monospace" font-size="9" fill="#00A86B">Real-time update</text>
+  </g>
+
+  <!-- Arrows from branch to merge -->
+  <path d="M550 390 L550 430 L610 430" stroke="#8b949e" stroke-width="1.5" fill="none" stroke-dasharray="4,3" marker-end="url(#arrowFlow)"/>
+  <path d="M780 390 L780 430 L720 430" stroke="#00A86B" stroke-width="1.5" fill="none" stroke-dasharray="4,3" marker-end="url(#arrowFlow)"/>
+
+  <!-- Merge point label -->
+  <circle cx="665" cy="430" r="4" fill="#c9d1d9"/>
+  <text x="682" y="434" font-family="'Segoe UI', Arial, sans-serif" font-size="10" fill="#8b949e">Either →</text>
+
+  <!-- ========== STEP 5: Update Status ========== -->
+  <g transform="translate(335, 455)">
+    <rect x="0" y="0" width="270" height="135" rx="14" fill="url(#boxSlate)" stroke="#FF6B35" stroke-width="2.5" filter="url(#shadow)"/>
+    <rect x="0" y="0" width="270" height="32" rx="14" fill="#FF6B35" opacity="0.1"/>
+    <rect x="0" y="18" width="270" height="14" fill="#FF6B35" opacity="0.1"/>
+
+    <!-- Success icon -->
+    <circle cx="30" cy="22" r="14" fill="#00A86B" opacity="0.2"/>
+    <path d="M22 22 L28 28 L38 16" fill="none" stroke="#00A86B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <text x="155" y="25" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="14" font-weight="700" fill="#FF6B35">✅ Update Status</text>
+
+    <text x="20" y="58" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#c9d1d9">Database operations:</text>
+    <text x="20" y="78" font-family="monospace" font-size="10" fill="#00A86B">UPDATE orders SET status = 'paid'</text>
+    <text x="20" y="96" font-family="monospace" font-size="10" fill="#8b949e">INSERT INTO transactions (...) VALUES</text>
+    <text x="20" y="123" font-family="'Segoe UI', Arial, sans-serif" font-size="10" fill="#8b949e">Notify user + clear shopping cart</text>
+  </g>
+
+  <!-- ========== Side panel: Status Timeline ========== -->
+  <g transform="translate(640, 455)">
+    <rect x="0" y="0" width="430" height="135" rx="12" fill="#161b22" stroke="#30363d" stroke-width="1" filter="url(#shadow)"/>
+    <text x="20" y="25" font-family="'Segoe UI', Arial, sans-serif" font-size="12" font-weight="600" fill="#c9d1d9">📊 Order Status Timeline</text>
+    <line x1="20" y1="33" x2="410" y2="33" stroke="#30363d" stroke-width="0.5"/>
+
+    <!-- Status timeline -->
+    <line x1="40" y1="60" x2="390" y2="60" stroke="#30363d" stroke-width="3" stroke-linecap="round"/>
+
+    <!-- Pending -->
+    <circle cx="60" cy="60" r="8" fill="#0d1117" stroke="#FF6B35" stroke-width="3"/>
+    <text x="60" y="50" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="9" fill="#FF6B35" font-weight="600">pending</text>
+
+    <!-- Processing -->
+    <line x1="68" y1="60" x2="142" y2="60" stroke="#26A5E4" stroke-width="2" stroke-dasharray="4,3"/>
+    <circle cx="150" cy="60" r="8" fill="#0d1117" stroke="#26A5E4" stroke-width="3"/>
+    <text x="150" y="50" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="9" fill="#26A5E4" font-weight="600">waiting</text>
+
+    <!-- Paid -->
+    <line x1="158" y1="60" x2="262" y2="60" stroke="#00A86B" stroke-width="2.5"/>
+    <circle cx="270" cy="60" r="8" fill="#00A86B" stroke="#00A86B" stroke-width="3"/>
+    <text x="270" y="50" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="9" fill="#00A86B" font-weight="600">paid ✓</text>
+
+    <!-- Completed -->
+    <line x1="278" y1="60" x2="362" y2="60" stroke="#8b949e" stroke-width="2" stroke-dasharray="4,3"/>
+    <circle cx="370" cy="60" r="8" fill="#0d1117" stroke="#8b949e" stroke-width="3"/>
+    <text x="370" y="50" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="9" fill="#8b949e">complete</text>
+
+    <!-- Timeline details -->
+    <text x="60" y="90" text-anchor="middle" font-family="monospace" font-size="8" fill="#8b949e">Invoice</text>
+    <text x="150" y="90" text-anchor="middle" font-family="monospace" font-size="8" fill="#8b949e">Polling</text>
+    <text x="270" y="90" text-anchor="middle" font-family="monospace" font-size="8" fill="#8b949e">Verified</text>
+    <text x="370" y="90" text-anchor="middle" font-family="monospace" font-size="8" fill="#8b949e">Done</text>
+
+    <!-- Edge cases -->
+    <line x1="20" y1="105" x2="410" y2="105" stroke="#30363d" stroke-width="0.5"/>
+    <text x="20" y="122" font-family="'Segoe UI', Arial, sans-serif" font-size="10" fill="#8b949e">Edge cases: Payment timeout (30min) → expired · Duplicate callback → idempotent check · Network failure → retry</text>
+  </g>
+</svg>

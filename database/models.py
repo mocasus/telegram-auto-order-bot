@@ -331,32 +331,37 @@ class Database:
 
         expired_at = datetime.now(timezone.utc) + timedelta(minutes=30)
 
-        self.conn.execute(
-            """INSERT INTO orders
-               (id, user_id, status, total_amount, admin_fee, tax_amount,
-                grand_total, expired_at)
-            VALUES (?, ?, 'pending', ?, ?, ?, ?, ?)""",
-            (order_id, user_id, total_amount, admin_fee, tax_amount, grand_total, expired_at),
-        )
-
-        for item in items:
+        self.conn.execute("BEGIN")
+        try:
             self.conn.execute(
-                """INSERT INTO order_items
-                   (order_id, product_id, product_name, price, quantity, subtotal)
-                VALUES (?, ?, ?, ?, ?, ?)""",
-                (
-                    order_id,
-                    item["product_id"],
-                    item["product_name"],
-                    item["price"],
-                    item["quantity"],
-                    item["subtotal"],
-                ),
+                """INSERT INTO orders
+                   (id, user_id, status, total_amount, admin_fee, tax_amount,
+                    grand_total, expired_at)
+                VALUES (?, ?, 'pending', ?, ?, ?, ?, ?)""",
+                (order_id, user_id, total_amount, admin_fee, tax_amount, grand_total, expired_at),
             )
-            # Kurangi stok
-            self.update_stock(item["product_id"], -item["quantity"])
 
-        self.conn.commit()
+            for item in items:
+                self.conn.execute(
+                    """INSERT INTO order_items
+                       (order_id, product_id, product_name, price, quantity, subtotal)
+                    VALUES (?, ?, ?, ?, ?, ?)""",
+                    (
+                        order_id,
+                        item["product_id"],
+                        item["product_name"],
+                        item["price"],
+                        item["quantity"],
+                        item["subtotal"],
+                    ),
+                )
+                # Kurangi stok
+                self.update_stock(item["product_id"], -item["quantity"])
+
+            self.conn.commit()
+        except Exception:
+            self.conn.execute("ROLLBACK")
+            raise
         return order_id
 
     def get_order(self, order_id: str) -> Optional[Dict[str, Any]]:
