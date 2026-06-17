@@ -29,6 +29,26 @@
 
 ## 🌐 Pilih Bahasa · Choose Language
 
+---
+
+### 📑 Daftar Isi · Table of Contents
+
+- [🚀 Mulai Cepat / Quick Start](#-mulai-cepat--3-langkah)
+- [✨ Fitur / Features](#-fitur)
+- [🗄️ Pilihan Database / Database Options](#-pilihan-database)
+- [🖥️ Opsi Deploy / Deploy Options](#-opsi-deploy)
+- [🔧 Konfigurasi Lengkap / Full Configuration](#-konfigurasi-lengkap)
+- [🔌 KlikQRIS API](#-klikqris-api)
+- [🎮 Penggunaan / Usage](#-penggunaan)
+- [📁 Struktur Proyek / Project Structure](#-struktur-proyek)
+- [🧪 Testing](#-testing)
+- [🛡️ Keamanan / Security](#-keamanan)
+- [🤝 Kontribusi / Contributing](#-kontribusi)
+- [📝 Lisensi / License](#-lisensi)
+- [📞 Bantuan / Support](#-bantuan)
+
+---
+
 <details open>
 <summary><strong>🇮🇩 Bahasa Indonesia</strong></summary>
 
@@ -49,11 +69,13 @@ cd telegram-auto-order-bot
 **2. Setup konfigurasi**
 ```bash
 cp .env.example .env
+cp config.example.yaml config.yaml
 nano .env   # isi token bot & API key
 ```
 
 **3. Jalankan**
 ```bash
+python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
 python bot.py
 ```
@@ -67,6 +89,26 @@ python bot.py
 | Python 3.11+ | [python.org](https://python.org) |
 | Token Bot Telegram | dari [@BotFather](https://t.me/BotFather) |
 | Akun KlikQRIS | 🔑 **[Dapatkan API Key di klikqris.com →](https://klikqris.com)** (lihat [panduan lengkap](#-cara-mendapatkan-api-key)) |
+
+<details>
+<summary><strong>📝 Cara mendapatkan Token Bot dari @BotFather</strong></summary>
+
+1. Buka Telegram dan cari [@BotFather](https://t.me/BotFather)
+2. Kirim perintah `/newbot`
+3. Ikuti instruksi: masukkan **nama bot** (contoh: `Toko Online Bot`)
+4. Masukkan **username bot** (harus diakhiri `bot`, contoh: `toko_online_bot`)
+5. Simpan **token** yang diberikan (format: `123456789:ABCdef...`)
+6. Masukkan token ke file `.env` pada `TELEGRAM_BOT_TOKEN`
+</details>
+
+<details>
+<summary><strong>🆔 Cara mendapatkan User ID Telegram</strong></summary>
+
+1. Buka Telegram dan cari [@userinfobot](https://t.me/userinfobot)
+2. Kirim pesan `/start`
+3. Bot akan membalas dengan **User ID** kamu
+4. Masukkan User ID ke file `.env` pada `ADMIN_USER_ID`
+</details>
 
 ---
 
@@ -192,8 +234,6 @@ docker run -d \
 
 #### 🚂 Railway
 
-[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/new)
-
 > Deploy instan ke Railway. Platform-as-a-Service dengan auto-deploy dari GitHub, logging, dan environment variables UI.
 
 ```bash
@@ -221,8 +261,6 @@ docker run -d \
 ---
 
 #### ⚡ Render
-
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com)
 
 > Deploy gratis ke Render dengan free tier. Mendukung background worker untuk bot Telegram.
 
@@ -261,7 +299,9 @@ services:
 | `KLIKQRIS_MODE` | `sandbox` atau `production` | `sandbox` |
 | `ADMIN_USER_ID` | User ID admin Telegram | *(wajib)* |
 | `DATABASE_URL` | URL PostgreSQL (opsional) | *(SQLite default)* |
+| `DATABASE_PATH` | Path ke file SQLite | `data/bot.db` |
 | `WEBHOOK_URL` | URL webhook callback | *(kosong)* |
+| `WEBHOOK_PORT` | Port webhook server | `8443` |
 | `CONFIG_PATH` | Path ke config.yaml | `config.yaml` |
 
 #### `config.yaml` — Semua Opsi
@@ -282,12 +322,15 @@ klikqris:
 
 database:
   path: "data/bot.db"         # Path file SQLite (abaikan jika pakai PostgreSQL)
-  url: ""                     # PostgreSQL URL (opsional): postgresql://user:pass@host/db
+  url: ""                     # PostgreSQL URL (opsional): postgresql://user:***@host/db
+  type: sqlite                # sqlite | postgresql
 
 webhook:
   enabled: false              # true = webhook, false = polling
   url: "https://..."          # URL webhook (HTTPS required)
   port: 8443                  # Port webhook server
+  cert_path: ""               # Path ke sertifikat SSL (opsional)
+  key_path: ""                # Path ke private key SSL (opsional)
 
 admin:
   user_id: 123456789          # User ID admin utama
@@ -299,6 +342,30 @@ toko:
   currency_symbol: "Rp"       # Simbol
   admin_fee: 0                # Biaya admin per transaksi
   tax_percent: 0              # PPN (persentase)
+
+pesan:
+  welcome: "Selamat datang di {name}!"  # Pesan sambutan
+  order_success: "Pesanan berhasil dibuat!"
+  payment_pending: "Menunggu pembayaran..."
+  payment_success: "Pembayaran berhasil!"
+  payment_expired: "Pembayaran kadaluarsa"
+
+kategori:
+  - id: 1
+    name: "Makanan"
+    emoji: "🍔"
+  - id: 2
+    name: "Minuman"
+    emoji: "🥤"
+
+produk:
+  - id: 1
+    name: "Nasi Goreng"
+    price: 15000
+    category_id: 1
+    description: "Nasi goreng spesial"
+    stock: 100
+    emoji: "🍛"
 ```
 
 ---
@@ -344,7 +411,7 @@ KLIKQRIS_MODE=sandbox    # ⬅️ gunakan sandbox dulu untuk testing!
 
 #### Endpoints
 
-|| Method | Endpoint | Deskripsi |
+| Method | Endpoint | Deskripsi |
 |---|---|---|
 | `POST` | `/v1/qris/create` | Buat pembayaran QRIS baru |
 | `GET` | `/v1/qris/status/{order_id}` | Cek status pembayaran |
@@ -485,11 +552,13 @@ cd telegram-auto-order-bot
 **2. Set up config**
 ```bash
 cp .env.example .env
+cp config.example.yaml config.yaml
 nano .env   # fill in bot token & API key
 ```
 
 **3. Run**
 ```bash
+python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
 python bot.py
 ```
@@ -503,6 +572,26 @@ python bot.py
 | Python 3.11+ | [python.org](https://python.org) |
 | Telegram Bot Token | from [@BotFather](https://t.me/BotFather) |
 | KlikQRIS Account | 🔑 **[Get API Keys at klikqris.com →](https://klikqris.com)** (see [full guide](#-how-to-get-api-keys)) |
+
+<details>
+<summary><strong>📝 How to get a Bot Token from @BotFather</strong></summary>
+
+1. Open Telegram and search for [@BotFather](https://t.me/BotFather)
+2. Send the `/newbot` command
+3. Follow the instructions: enter a **bot name** (e.g. `Online Store Bot`)
+4. Enter a **bot username** (must end with `bot`, e.g. `online_store_bot`)
+5. Save the **token** you receive (format: `123456789:ABCdef...`)
+6. Enter the token in `.env` as `TELEGRAM_BOT_TOKEN`
+</details>
+
+<details>
+<summary><strong>🆔 How to get your Telegram User ID</strong></summary>
+
+1. Open Telegram and search for [@userinfobot](https://t.me/userinfobot)
+2. Send the `/start` message
+3. The bot will reply with your **User ID**
+4. Enter your User ID in `.env` as `ADMIN_USER_ID`
+</details>
 
 ---
 
@@ -628,8 +717,6 @@ docker run -d \
 
 #### 🚂 Railway
 
-[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/new)
-
 > Instant deploy to Railway. PaaS with auto-deploy from GitHub, logging, and environment variables UI.
 
 ```bash
@@ -657,8 +744,6 @@ docker run -d \
 ---
 
 #### ⚡ Render
-
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com)
 
 > Free deploy to Render with free tier. Supports background workers for Telegram bots.
 
@@ -697,7 +782,9 @@ services:
 | `KLIKQRIS_MODE` | `sandbox` or `production` | `sandbox` |
 | `ADMIN_USER_ID` | Admin Telegram User ID | *(required)* |
 | `DATABASE_URL` | PostgreSQL URL (optional) | *(SQLite default)* |
+| `DATABASE_PATH` | SQLite file path | `data/bot.db` |
 | `WEBHOOK_URL` | Webhook callback URL | *(empty)* |
+| `WEBHOOK_PORT` | Webhook server port | `8443` |
 | `CONFIG_PATH` | Path to config.yaml | `config.yaml` |
 
 #### `config.yaml` — All Options
@@ -718,23 +805,50 @@ klikqris:
 
 database:
   path: "data/bot.db"         # SQLite file path (ignore if using PostgreSQL)
-  url: ""                     # PostgreSQL URL (optional): postgresql://user:pass@host/db
+  url: ""                     # PostgreSQL URL (optional): postgresql://user:***@host/db
+  type: sqlite                # sqlite | postgresql
 
 webhook:
   enabled: false              # true = webhook, false = polling
   url: "https://..."          # Webhook URL (HTTPS required)
   port: 8443                  # Webhook server port
+  cert_path: ""               # SSL certificate path (optional)
+  key_path: ""                # SSL private key path (optional)
 
 admin:
   user_id: 123456789          # Primary admin user ID
   additional_ids: []          # Additional admins
 
-store:
+toko:
   name: "Online Store"        # Store name
   currency: "IDR"             # Currency
   currency_symbol: "Rp"       # Symbol
   admin_fee: 0                # Admin fee per transaction
   tax_percent: 0              # Tax (percentage)
+
+messages:
+  welcome: "Welcome to {name}!"  # Welcome message
+  order_success: "Order created successfully!"
+  payment_pending: "Waiting for payment..."
+  payment_success: "Payment successful!"
+  payment_expired: "Payment expired"
+
+categories:
+  - id: 1
+    name: "Food"
+    emoji: "🍔"
+  - id: 2
+    name: "Beverages"
+    emoji: "🥤"
+
+products:
+  - id: 1
+    name: "Fried Rice"
+    price: 15000
+    category_id: 1
+    description: "Special fried rice"
+    stock: 100
+    emoji: "🍛"
 ```
 
 ---
