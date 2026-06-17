@@ -1,103 +1,261 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
+    <!-- Background radial gradient for depth -->
+    <radialGradient id="bgGlow" cx="50%" cy="45%" r="55%">
+      <stop offset="0%" stop-color="#162231"/>
+      <stop offset="100%" stop-color="#0d1117"/>
+    </radialGradient>
+
+    <!-- Green gradient for bag and QR elements -->
     <linearGradient id="greenGrad" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#00A86B"/>
-      <stop offset="100%" stop-color="#00D68F"/>
+      <stop offset="0%" stop-color="#00D68F"/>
+      <stop offset="100%" stop-color="#00A86B"/>
     </linearGradient>
+
+    <!-- Blue gradient for handle -->
+    <linearGradient id="blueGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#26A5E4"/>
+      <stop offset="50%" stop-color="#40C4FF"/>
+      <stop offset="100%" stop-color="#26A5E4"/>
+    </linearGradient>
+
+    <!-- Subtle glow filter for key elements -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+
+    <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
   </defs>
 
   <!-- Background -->
-  <rect width="512" height="512" rx="72" fill="#0d1117"/>
+  <rect width="512" height="512" rx="48" fill="url(#bgGlow)"/>
 
-  <!-- Subtle inner border -->
-  <rect x="8" y="8" width="496" height="496" rx="64"
-        fill="none" stroke="#1a2332" stroke-width="2"/>
+  <!-- Subtle border ring -->
+  <rect x="12" y="12" width="488" height="488" rx="40"
+        fill="none" stroke="#1a2736" stroke-width="2"/>
 
-  <!-- ===== SHOPPING BAG ===== -->
-  <g transform="translate(256, 248)">
+  <!-- ===== SHOPPING BAG OUTLINE ===== -->
+  <!-- Bag body: rounded rect, 200×230, centered slightly below middle -->
+  <rect x="156" y="170" width="200" height="230" rx="18"
+        fill="#00A86B06" stroke="url(#greenGrad)" stroke-width="3"
+        filter="url(#glow)"/>
 
-    <!-- Bag body — clean trapezoid -->
-    <path d="M-90,-80 L90,-80 L60,90 L-60,90 Z"
-          fill="none" stroke="url(#greenGrad)" stroke-width="12"
-          stroke-linejoin="round"/>
+  <!-- ===== HANDLE ===== -->
+  <!-- Elegant curved handle above the bag -->
+  <path d="M 206 170 C 206 92, 306 92, 306 170"
+        fill="none" stroke="url(#blueGrad)" stroke-width="5.5"
+        stroke-linecap="round" filter="url(#softGlow)"/>
 
-    <!-- Bag bottom — slightly thicker -->
-    <line x1="-60" y1="90" x2="60" y2="90"
-          stroke="url(#greenGrad)" stroke-width="14" stroke-linecap="round"/>
+  <!-- Handle connector dots (blue accent) -->
+  <circle cx="206" cy="170" r="6" fill="#26A5E4" filter="url(#glow)"/>
+  <circle cx="306" cy="170" r="6" fill="#26A5E4" filter="url(#glow)"/>
 
-    <!-- Bag handle — elegant arch -->
-    <path d="M-60,-80 C-60,-170 60,-170 60,-80"
-          fill="none" stroke="url(#greenGrad)" stroke-width="12"
-          stroke-linecap="round"/>
+  <!-- ===== QR POSITION MARKERS ===== -->
+  <!-- Each marker: outer square → inner filled → center knockout -->
 
-    <!-- QR finder integrated into handle — concentric squares as decorative handle caps -->
-    <!-- Left handle cap (finder pattern) -->
-    <rect x="-78" y="-155" width="36" height="36" rx="6"
-          fill="none" stroke="#00A86B" stroke-width="5"/>
-    <rect x="-70" y="-147" width="20" height="20" rx="4"
-          fill="none" stroke="#00A86B" stroke-width="4"/>
-    <rect x="-64" y="-141" width="8" height="8" rx="2"
-          fill="#00A86B"/>
-
-    <!-- Right handle cap (finder pattern) -->
-    <rect x="42" y="-155" width="36" height="36" rx="6"
-          fill="none" stroke="#00A86B" stroke-width="5"/>
-    <rect x="50" y="-147" width="20" height="20" rx="4"
-          fill="none" stroke="#00A86B" stroke-width="4"/>
-    <rect x="56" y="-141" width="8" height="8" rx="2"
-          fill="#00A86B"/>
-
-    <!-- ===== QR DATA MODULES — sparse, deliberate grid inside bag ===== -->
-    <!-- Row 1 -->
-    <rect x="-60" y="-58" width="10" height="10" rx="2.5" fill="#00A86B"/>
-    <rect x="-32" y="-58" width="10" height="10" rx="2.5" fill="#00D68F" opacity="0.7"/>
-    <rect x="-4"  y="-58" width="10" height="10" rx="2.5" fill="#00A86B" opacity="0.6"/>
-    <rect x="24"  y="-58" width="10" height="10" rx="2.5" fill="#00A86B"/>
-    <rect x="48"  y="-58" width="10" height="10" rx="2.5" fill="#00D68F" opacity="0.5"/>
-
-    <!-- Row 2 -->
-    <rect x="-46" y="-38" width="10" height="10" rx="2.5" fill="#00D68F" opacity="0.7"/>
-    <rect x="-18" y="-38" width="10" height="10" rx="2.5" fill="#00A86B"/>
-    <rect x="10"  y="-38" width="10" height="10" rx="2.5" fill="#00A86B" opacity="0.6"/>
-    <rect x="38"  y="-38" width="10" height="10" rx="2.5" fill="#00D68F" opacity="0.7"/>
-
-    <!-- Row 3 — center row, slightly different pattern -->
-    <rect x="-60" y="-18" width="10" height="10" rx="2.5" fill="#00A86B" opacity="0.6"/>
-    <rect x="-32" y="-18" width="10" height="10" rx="2.5" fill="#00D68F"/>
-    <rect x="-4"  y="-18" width="10" height="10" rx="2.5" fill="#00A86B" opacity="0.5"/>
-    <rect x="24"  y="-18" width="10" height="10" rx="2.5" fill="#00A86B"/>
-    <rect x="48"  y="-18" width="10" height="10" rx="2.5" fill="#00D68F" opacity="0.6"/>
-
-    <!-- Row 4 -->
-    <rect x="-46" y="2"   width="10" height="10" rx="2.5" fill="#00A86B"/>
-    <rect x="-18" y="2"   width="10" height="10" rx="2.5" fill="#00D68F" opacity="0.7"/>
-    <rect x="10"  y="2"   width="10" height="10" rx="2.5" fill="#00A86B" opacity="0.6"/>
-    <rect x="38"  y="2"   width="10" height="10" rx="2.5" fill="#00D68F"/>
-
-    <!-- Row 5 -->
-    <rect x="-60" y="22"  width="10" height="10" rx="2.5" fill="#00D68F" opacity="0.7"/>
-    <rect x="-32" y="22"  width="10" height="10" rx="2.5" fill="#00A86B" opacity="0.6"/>
-    <rect x="-4"  y="22"  width="10" height="10" rx="2.5" fill="#00A86B"/>
-    <rect x="24"  y="22"  width="10" height="10" rx="2.5" fill="#00D68F" opacity="0.5"/>
-    <rect x="48"  y="22"  width="10" height="10" rx="2.5" fill="#00A86B" opacity="0.6"/>
-
-    <!-- Row 6 -->
-    <rect x="-46" y="42"  width="10" height="10" rx="2.5" fill="#00A86B" opacity="0.6"/>
-    <rect x="-18" y="42"  width="10" height="10" rx="2.5" fill="#00D68F"/>
-    <rect x="10"  y="42"  width="10" height="10" rx="2.5" fill="#00A86B" opacity="0.7"/>
-    <rect x="38"  y="42"  width="10" height="10" rx="2.5" fill="#00A86B"/>
-
-    <!-- Row 7 — near bottom -->
-    <rect x="-60" y="62"  width="10" height="10" rx="2.5" fill="#00A86B"/>
-    <rect x="-32" y="62"  width="10" height="10" rx="2.5" fill="#00D68F" opacity="0.6"/>
-    <rect x="-4"  y="62"  width="10" height="10" rx="2.5" fill="#00A86B" opacity="0.5"/>
-    <rect x="24"  y="62"  width="10" height="10" rx="2.5" fill="#00D68F" opacity="0.7"/>
-    <rect x="48"  y="62"  width="10" height="10" rx="2.5" fill="#00A86B"/>
-
+  <!-- Marker 1: Bottom-Left -->
+  <g filter="url(#glow)">
+    <rect x="172" y="316" width="54" height="54" rx="7"
+          fill="none" stroke="#00A86B" stroke-width="2.5"/>
+    <rect x="181" y="325" width="36" height="36" rx="5"
+          fill="url(#greenGrad)"/>
+    <rect x="193" y="337" width="12" height="12" rx="3"
+          fill="#0d1117"/>
   </g>
 
-  <!-- Bottom accent line — subtle -->
-  <line x1="156" y1="472" x2="356" y2="472"
-        stroke="#00A86B" stroke-width="1.5" opacity="0.08"/>
+  <!-- Marker 2: Bottom-Right -->
+  <g filter="url(#glow)">
+    <rect x="286" y="316" width="54" height="54" rx="7"
+          fill="none" stroke="#00A86B" stroke-width="2.5"/>
+    <rect x="295" y="325" width="36" height="36" rx="5"
+          fill="url(#greenGrad)"/>
+    <rect x="307" y="337" width="12" height="12" rx="3"
+          fill="#0d1117"/>
+  </g>
+
+  <!-- Marker 3: Top-Center -->
+  <g filter="url(#glow)">
+    <rect x="229" y="186" width="54" height="54" rx="7"
+          fill="none" stroke="#00A86B" stroke-width="2.5"/>
+    <rect x="238" y="195" width="36" height="36" rx="5"
+          fill="url(#greenGrad)"/>
+    <rect x="250" y="207" width="12" height="12" rx="3"
+          fill="#0d1117"/>
+  </g>
+
+  <!-- ===== QR DATA DOT GRID ===== -->
+  <!-- 13 columns × 15 rows, 14px spacing, origin at (170, 186) -->
+  <g fill="#00A86B" opacity="0.85">
+    <!-- Row 0 (y=186) — skip cols 4-7 for marker 3 -->
+    <circle cx="170" cy="186" r="3.5"/>
+    <circle cx="184" cy="186" r="3.5"/>
+    <circle cx="198" cy="186" r="3.5"/>
+    <circle cx="212" cy="186" r="3.5"/>
+    <circle cx="282" cy="186" r="3.5"/>
+    <circle cx="296" cy="186" r="3.5"/>
+    <circle cx="310" cy="186" r="3.5"/>
+    <circle cx="324" cy="186" r="3.5"/>
+    <circle cx="338" cy="186" r="3.5"/>
+
+    <!-- Row 1 (y=200) — skip cols 4-7 -->
+    <circle cx="170" cy="200" r="3.5"/>
+    <circle cx="198" cy="200" r="3.5"/>
+    <circle cx="212" cy="200" r="3.5"/>
+    <circle cx="282" cy="200" r="3.5"/>
+    <circle cx="296" cy="200" r="3.5"/>
+    <circle cx="324" cy="200" r="3.5"/>
+    <circle cx="338" cy="200" r="3.5"/>
+
+    <!-- Row 2 (y=214) — skip cols 4-7 -->
+    <circle cx="184" cy="214" r="3.5"/>
+    <circle cx="198" cy="214" r="3.5"/>
+    <circle cx="212" cy="214" r="3.5"/>
+    <circle cx="282" cy="214" r="3.5"/>
+    <circle cx="310" cy="214" r="3.5"/>
+    <circle cx="324" cy="214" r="3.5"/>
+    <circle cx="338" cy="214" r="3.5"/>
+
+    <!-- Row 3 (y=228) — skip cols 4-7, transition row -->
+    <circle cx="170" cy="228" r="3.5"/>
+    <circle cx="212" cy="228" r="3.5"/>
+    <circle cx="282" cy="228" r="3.5"/>
+    <circle cx="296" cy="228" r="3.5"/>
+    <circle cx="338" cy="228" r="3.5"/>
+
+    <!-- Row 4 (y=242) — full row except marker edges -->
+    <circle cx="170" cy="242" r="3.5"/>
+    <circle cx="198" cy="242" r="3.5"/>
+    <circle cx="212" cy="242" r="3.5"/>
+    <circle cx="226" cy="242" r="3.5"/>
+    <circle cx="240" cy="242" r="3.5"/>
+    <circle cx="268" cy="242" r="3.5"/>
+    <circle cx="282" cy="242" r="3.5"/>
+    <circle cx="310" cy="242" r="3.5"/>
+    <circle cx="324" cy="242" r="3.5"/>
+    <circle cx="338" cy="242" r="3.5"/>
+
+    <!-- Row 5 (y=256) — center sparse -->
+    <circle cx="170" cy="256" r="3.5"/>
+    <circle cx="184" cy="256" r="3.5"/>
+    <circle cx="212" cy="256" r="3.5"/>
+    <circle cx="226" cy="256" r="3.5"/>
+    <circle cx="282" cy="256" r="3.5"/>
+    <circle cx="296" cy="256" r="3.5"/>
+    <circle cx="324" cy="256" r="3.5"/>
+    <circle cx="338" cy="256" r="3.5"/>
+
+    <!-- Row 6 (y=270) — alternating rhythm -->
+    <circle cx="170" cy="270" r="3.5"/>
+    <circle cx="198" cy="270" r="3.5"/>
+    <circle cx="212" cy="270" r="3.5"/>
+    <circle cx="240" cy="270" r="3.5"/>
+    <circle cx="268" cy="270" r="3.5"/>
+    <circle cx="282" cy="270" r="3.5"/>
+    <circle cx="310" cy="270" r="3.5"/>
+    <circle cx="338" cy="270" r="3.5"/>
+
+    <!-- Row 7 (y=284) — horizontal timing pattern row -->
+    <circle cx="170" cy="284" r="4.5"/>
+    <circle cx="198" cy="284" r="4.5"/>
+    <circle cx="226" cy="284" r="4.5"/>
+    <circle cx="254" cy="284" r="4.5"/>
+    <circle cx="282" cy="284" r="4.5"/>
+    <circle cx="310" cy="284" r="4.5"/>
+    <circle cx="338" cy="284" r="4.5"/>
+
+    <!-- Row 8 (y=298) — transition to lower markers -->
+    <circle cx="170" cy="298" r="3.5"/>
+    <circle cx="198" cy="298" r="3.5"/>
+    <circle cx="226" cy="298" r="3.5"/>
+    <circle cx="240" cy="298" r="3.5"/>
+    <circle cx="268" cy="298" r="3.5"/>
+    <circle cx="282" cy="298" r="3.5"/>
+    <circle cx="310" cy="298" r="3.5"/>
+    <circle cx="324" cy="298" r="3.5"/>
+
+    <!-- Row 9 (y=312) — between bottom markers, cols 4-8 only -->
+    <circle cx="240" cy="312" r="3.5"/>
+    <circle cx="254" cy="312" r="3.5"/>
+    <circle cx="268" cy="312" r="3.5"/>
+    <circle cx="282" cy="312" r="3.5"/>
+
+    <!-- Row 10 (y=326) — narrow center band -->
+    <circle cx="240" cy="326" r="3.5"/>
+    <circle cx="268" cy="326" r="3.5"/>
+    <circle cx="282" cy="326" r="3.5"/>
+
+    <!-- Row 11 (y=340) — narrow center band -->
+    <circle cx="254" cy="340" r="3.5"/>
+    <circle cx="282" cy="340" r="3.5"/>
+
+    <!-- Row 12 (y=354) — narrow center band -->
+    <circle cx="240" cy="354" r="3.5"/>
+    <circle cx="268" cy="354" r="3.5"/>
+    <circle cx="282" cy="354" r="3.5"/>
+
+    <!-- Row 13 (y=368) — bottom row, wide again -->
+    <circle cx="170" cy="368" r="3.5"/>
+    <circle cx="198" cy="368" r="3.5"/>
+    <circle cx="212" cy="368" r="3.5"/>
+    <circle cx="240" cy="368" r="3.5"/>
+    <circle cx="268" cy="368" r="3.5"/>
+    <circle cx="296" cy="368" r="3.5"/>
+    <circle cx="310" cy="368" r="3.5"/>
+    <circle cx="338" cy="368" r="3.5"/>
+
+    <!-- Row 14 (y=382) — final row, bag bottom -->
+    <circle cx="184" cy="382" r="3.5"/>
+    <circle cx="212" cy="382" r="3.5"/>
+    <circle cx="226" cy="382" r="3.5"/>
+    <circle cx="240" cy="382" r="3.5"/>
+    <circle cx="254" cy="382" r="3.5"/>
+    <circle cx="268" cy="382" r="3.5"/>
+    <circle cx="282" cy="382" r="3.5"/>
+    <circle cx="310" cy="382" r="3.5"/>
+    <circle cx="324" cy="382" r="3.5"/>
+    <circle cx="338" cy="382" r="3.5"/>
+  </g>
+
+  <!-- ===== VERTICAL TIMING PATTERN ===== -->
+  <!-- Dots along column 5 (x=240), rows 4-8, connecting upper and lower markers -->
+  <g fill="#00A86B" opacity="0.7">
+    <circle cx="240" cy="242" r="4"/>
+    <circle cx="240" cy="256" r="4"/>
+    <circle cx="240" cy="270" r="4"/>
+    <circle cx="240" cy="284" r="4"/>
+    <circle cx="240" cy="298" r="4"/>
+  </g>
+
+  <!-- ===== BAG FOLD CREASE (subtle center line) ===== -->
+  <line x1="256" y1="248" x2="256" y2="392"
+        stroke="#00A86B" stroke-width="1" opacity="0.12"
+        stroke-dasharray="6,10"/>
+
+  <!-- ===== BLUE ACCENT: small geometric detail near handle ===== -->
+  <g opacity="0.9">
+    <!-- Tiny blue diamonds at handle attachment points -->
+    <rect x="199" y="163" width="14" height="14" rx="3"
+          fill="#26A5E4" transform="rotate(45 206 170)" opacity="0.8"/>
+    <rect x="299" y="163" width="14" height="14" rx="3"
+          fill="#26A5E4" transform="rotate(45 306 170)" opacity="0.8"/>
+  </g>
+
+  <!-- ===== SUBTLE CORNER ACCENTS on bag ===== -->
+  <!-- Small green corner brackets to emphasize bag shape -->
+  <g stroke="#00A86B" stroke-width="2" opacity="0.25" fill="none"
+     stroke-linecap="round">
+    <!-- Top-left -->
+    <path d="M 166 196 L 166 184 L 178 184"/>
+    <!-- Top-right -->
+    <path d="M 346 196 L 346 184 L 334 184"/>
+    <!-- Bottom-left -->
+    <path d="M 166 388 L 166 396 L 178 396"/>
+    <!-- Bottom-right -->
+    <path d="M 346 388 L 346 396 L 334 396"/>
+  </g>
 
 </svg>
