@@ -17,6 +17,14 @@
   <img src="https://img.shields.io/badge/Payment-KlikQRIS_QRIS-0066AE?style=flat-square" alt="Payment">
 </p>
 
+<p align="center">
+  <a href="https://klikqris.com">
+    <img src="https://img.shields.io/badge/🔑_GET_API_KEYS-klikqris.com-0066AE?style=for-the-badge&logoColor=white&labelColor=003366" alt="Get KlikQRIS API Keys">
+  </a>
+  <br>
+  <sub>⬆️ <strong>Daftar gratis / Free registration</strong> — API Key + Merchant ID</sub>
+</p>
+
 ---
 
 ## 🌐 Pilih Bahasa · Choose Language
@@ -58,7 +66,7 @@ python bot.py
 |---|---|
 | Python 3.11+ | [python.org](https://python.org) |
 | Token Bot Telegram | dari [@BotFather](https://t.me/BotFather) |
-| Akun KlikQRIS | API Key + Merchant ID |
+| Akun KlikQRIS | 🔑 **[Dapatkan API Key di klikqris.com →](https://klikqris.com)** (lihat [panduan lengkap](#-cara-mendapatkan-api-key)) |
 
 ---
 
@@ -297,16 +305,51 @@ toko:
 
 ### 🔌 KlikQRIS API
 
+#### 🔑 Cara Mendapatkan API Key
+
+> **🌐 Website KlikQRIS: [https://klikqris.com](https://klikqris.com) — [🔗 Daftar Gratis!](https://klikqris.com)**
+
+<p align="center">
+  <a href="https://klikqris.com">
+    <img src="https://img.shields.io/badge/🔑_Get_API_Key-KlikQRIS-0066AE?style=for-the-badge&logoColor=white" alt="Get API Key">
+  </a>
+  <a href="https://klikqris.com">
+    <img src="https://img.shields.io/badge/🧪_Sandbox_Gratis-Testing-4CAF50?style=for-the-badge" alt="Free Sandbox">
+  </a>
+</p>
+
+Ikuti langkah-langkah berikut untuk mendapatkan API Key dan Merchant ID:
+
+1. **📝 Daftar akun** di [https://klikqris.com](https://klikqris.com) — klik tombol **Daftar** / **Register**
+2. **✉️ Verifikasi email** — cek inbox dan klik link verifikasi yang dikirim
+3. **🔐 Login ke Dashboard** — setelah verifikasi, masuk ke dashboard KlikQRIS
+4. **🔑 Dapatkan API Key & Merchant ID:**
+   - Buka menu **Pengaturan** → **API Integration** (atau **Integrasi API**)
+   - **API Key** — akan terlihat di bagian "API Key". Jika belum ada, klik **Generate API Key**
+   - **Merchant ID** — terlihat di bagian **Informasi Merchant** atau halaman utama dashboard
+5. **💾 Simpan kredensial** — masukkan ke file `.env` kamu:
+
+```env
+KLIKQRIS_API_KEY=api_key_kamu_disini
+KLIKQRIS_MERCHANT_ID=merchant_id_kamu_disini
+KLIKQRIS_MODE=sandbox    # ⬅️ gunakan sandbox dulu untuk testing!
+```
+
+> **🧪 Mode Sandbox (Testing Gratis):**
+> KlikQRIS menyediakan **sandbox GRATIS** untuk pengujian. Semua transaksi dalam mode sandbox **TIDAK menggunakan uang sungguhan** — aman untuk pengembangan dan uji coba. Setelah siap, ganti `KLIKQRIS_MODE=production` untuk transaksi nyata.
+>
+> *Jika kesulitan, kunjungi [https://klikqris.com](https://klikqris.com) atau hubungi support KlikQRIS melalui website mereka.*
+
+---
+
 #### Endpoints
 
-| Method | Endpoint | Deskripsi |
+|| Method | Endpoint | Deskripsi |
 |---|---|---|
 | `POST` | `/v1/qris/create` | Buat pembayaran QRIS baru |
 | `GET` | `/v1/qris/status/{order_id}` | Cek status pembayaran |
 | `GET` | `/v1/qris/history?page=N` | Riwayat transaksi |
 | `POST` | Webhook Callback | Notifikasi pembayaran |
-
-> **Mode Sandbox:** Gunakan `KLIKQRIS_MODE=sandbox` untuk testing tanpa uang sungguhan.
 
 ---
 
@@ -459,7 +502,7 @@ python bot.py
 |---|---|
 | Python 3.11+ | [python.org](https://python.org) |
 | Telegram Bot Token | from [@BotFather](https://t.me/BotFather) |
-| KlikQRIS Account | API Key + Merchant ID |
+| KlikQRIS Account | 🔑 **[Get API Keys at klikqris.com →](https://klikqris.com)** (see [full guide](#-how-to-get-api-keys)) |
 
 ---
 
@@ -698,6 +741,43 @@ store:
 
 ### 🔌 KlikQRIS API
 
+#### 🔑 How to Get API Keys
+
+> **🌐 KlikQRIS Website: [https://klikqris.com](https://klikqris.com) — [🔗 Free Registration!](https://klikqris.com)**
+
+<p align="center">
+  <a href="https://klikqris.com">
+    <img src="https://img.shields.io/badge/🔑_Get_API_Key-KlikQRIS-0066AE?style=for-the-badge&logoColor=white" alt="Get API Key">
+  </a>
+  <a href="https://klikqris.com">
+    <img src="https://img.shields.io/badge/🧪_Free_Sandbox-Testing-4CAF50?style=for-the-badge" alt="Free Sandbox">
+  </a>
+</p>
+
+Follow these steps to get your API Key and Merchant ID:
+
+1. **📝 Register** at [https://klikqris.com](https://klikqris.com) — click the **Register** / **Sign Up** button
+2. **✉️ Verify your email** — check your inbox and click the verification link
+3. **🔐 Login to Dashboard** — after verification, log into the KlikQRIS dashboard
+4. **🔑 Get API Key & Merchant ID:**
+   - Go to **Settings** → **API Integration**
+   - **API Key** — you'll see it in the "API Key" section. If not yet generated, click **Generate API Key**
+   - **Merchant ID** — visible in the **Merchant Information** section or main dashboard page
+5. **💾 Save credentials** — add them to your `.env` file:
+
+```env
+KLIKQRIS_API_KEY=your_api_key_here
+KLIKQRIS_MERCHANT_ID=your_merchant_id_here
+KLIKQRIS_MODE=sandbox    # ⬅️ start with sandbox for testing!
+```
+
+> **🧪 Sandbox Mode (Free Testing):**
+> KlikQRIS provides a **FREE sandbox** for testing. All sandbox mode transactions use **NO real money** — safe for development and testing. When ready, switch to `KLIKQRIS_MODE=production` for real transactions.
+>
+> *If you have trouble, visit [https://klikqris.com](https://klikqris.com) or contact KlikQRIS support through their website.*
+
+---
+
 #### Endpoints
 
 | Method | Endpoint | Description |
@@ -706,8 +786,6 @@ store:
 | `GET` | `/v1/qris/status/{order_id}` | Check payment status |
 | `GET` | `/v1/qris/history?page=N` | Transaction history |
 | `POST` | Webhook Callback | Payment notification |
-
-> **Sandbox Mode:** Use `KLIKQRIS_MODE=sandbox` for testing without real money.
 
 ---
 
