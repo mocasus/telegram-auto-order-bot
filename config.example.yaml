@@ -27,8 +27,18 @@ klikqris:
   max_polling_attempts: 30
 
 database:
-  # Path ke file SQLite
+  # Tipe database: sqlite (default), postgresql, atau mysql
+  type: sqlite
+  # SQLite: path ke file database
   path: "data/bot.db"
+  # PostgreSQL / MySQL — isi jika menggunakan non-SQLite:
+  # host: localhost
+  # port: 5432
+  # user: postgres
+  # password: ""
+  # database: bot
+  # Atau gunakan URL koneksi langsung:
+  # url: "postgresql://user:pass@host:5432/bot"
 
 webhook:
   # Aktifkan webhook (false = polling)
