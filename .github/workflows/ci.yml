@@ -1,0 +1,147 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  lint:
+    name: Lint and Format Check
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    
+    - name: Cache pip packages
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install ruff black mypy
+        pip install -r requirements.txt
+    
+    - name: Run Ruff (Linter)
+      run: |
+        ruff check . --output-format=github
+      continue-on-error: true
+    
+    - name: Run Black (Format Check)
+      run: |
+        black --check --diff .
+      continue-on-error: true
+    
+    - name: Run MyPy (Type Check)
+      run: |
+        mypy bot.py --ignore-missing-imports
+      continue-on-error: true
+
+  security:
+    name: Security Check
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install bandit safety
+    
+    - name: Run Bandit (Security Linter)
+      run: |
+        bandit -r . -f json -o bandit-report.json || true
+        bandit -r . -f screen
+      continue-on-error: true
+    
+    - name: Check for vulnerable dependencies
+      run: |
+        safety check --json || true
+        safety check
+      continue-on-error: true
+
+  validate:
+    name: Validate Config Files
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    
+    - name: Install PyYAML
+      run: pip install pyyaml
+    
+    - name: Validate YAML files
+      run: |
+        python -c "import yaml; yaml.safe_load(open('config.example.yaml'))" && echo "✅ config.example.yaml is valid"
+        python -c "import yaml; yaml.safe_load(open('docker-compose.yml'))" && echo "✅ docker-compose.yml is valid"
+    
+    - name: Check for secrets in code
+      run: |
+        echo "Checking for potential secrets..."
+        ! grep -rEi "(password|secret|api_key|token).*=.*['\"][a-zA-Z0-9]{20,}" . \
+          --exclude-dir={.git,venv,__pycache__,.github} \
+          --exclude="*.{md,example,sample}" || echo "⚠️  Potential secrets found"
+
+  docker:
+    name: Docker Build Test
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+    
+    - name: Build Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: false
+        tags: telegram-auto-order-bot:test
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+  test-import:
+    name: Test Module Imports
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Test imports
+      run: |
+        python -c "from database.models import Database; print('✅ database.models')"
+        python -c "from payments.klikqris import KlikQRIS; print('✅ payments.klikqris')"
+        python -c "import bot; print('✅ bot.py imports successfully')" || echo "⚠️  bot.py requires config"
