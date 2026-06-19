@@ -37,6 +37,7 @@ CREATE TABLE IF NOT EXISTS orders (
   quantity INTEGER NOT NULL,
   total INTEGER NOT NULL,
   status TEXT DEFAULT 'pending',
+  qris_ref TEXT,
   created_at TEXT DEFAULT (datetime('now')),
   FOREIGN KEY (product_id) REFERENCES products(id)
 );
@@ -73,6 +74,12 @@ def init_db(path: str) -> None:
     _conn = sqlite3.connect(str(path), check_same_thread=False)
     _conn.row_factory = sqlite3.Row
     _conn.executescript(_SCHEMA_SQL)
+    # Idempotent migration: tambah kolom qris_ref ke orders jika DB lama.
+    try:
+        _conn.execute("ALTER TABLE orders ADD COLUMN qris_ref TEXT")
+        _conn.commit()
+    except sqlite3.OperationalError:
+        pass  # kolom sudah ada
     _conn.commit()
 
 
@@ -129,16 +136,21 @@ def create_order(
     product_id: int,
     quantity: int,
     total: int,
+    qris_ref: str | None = None,
 ) -> None:
-    """Insert a new order. The `status` defaults to 'pending' via the schema."""
+    """Insert a new order. The `status` defaults to 'pending' via the schema.
+
+    `qris_ref` diisi dengan ID referensi KlikQRIS (biasanya = order_id) setelah
+    QRIS berhasil dibuat. None = order manual transfer.
+    """
     assert _conn is not None, "init_db() must be called before create_order()"
     _conn.execute(
         """
         INSERT INTO orders
-            (id, user_id, username, first_name, product_id, quantity, total)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+            (id, user_id, username, first_name, product_id, quantity, total, qris_ref)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         """,
-        (order_id, user_id, username, first_name, product_id, quantity, total),
+        (order_id, user_id, username, first_name, product_id, quantity, total, qris_ref),
     )
     _conn.commit()
 
@@ -178,6 +190,26 @@ def update_order_status(order_id: str, status: str) -> bool:
     )
     _conn.commit()
     return cur.rowcount > 0
+
+
+def set_order_qris_ref(order_id: str, qris_ref: str) -> bool:
+    """Set qris_ref untuk order yang sudah berhasil dibuat QRIS-nya."""
+    assert _conn is not None, "init_db() must be called before set_order_qris_ref()"
+    cur = _conn.execute(
+        "UPDATE orders SET qris_ref = ? WHERE id = ?",
+        (qris_ref, order_id),
+    )
+    _conn.commit()
+    return cur.rowcount > 0
+
+
+def get_pending_qris_orders() -> list[dict]:
+    """Ambil semua order pending yang punya qris_ref (untuk di-poll)."""
+    assert _conn is not None, "init_db() must be called before get_pending_qris_orders()"
+    rows = _conn.execute(
+        "SELECT * FROM orders WHERE status = 'pending' AND qris_ref IS NOT NULL ORDER BY created_at ASC LIMIT 50"
+    ).fetchall()
+    return [_row_to_dict(r) for r in rows]  # type: ignore[misc]
 
 
 # ---------------------------------------------------------------------------

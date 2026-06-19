@@ -36,3 +36,10 @@ PAYMENT_NUMBER: str = os.getenv("PAYMENT_NUMBER", "123-456-789")
 PAYMENT_NAME: str = os.getenv("PAYMENT_NAME", "Moca")
 SHOP_NAME: str = os.getenv("SHOP_NAME", "Toko Moca")
 DB_PATH: str = os.getenv("DB_PATH", "data/bot.db")
+
+# KlikQRIS payment gateway (opsional — jika kosong, fallback ke info transfer manual)
+KLIKQRIS_API_KEY: str = os.getenv("KLIKQRIS_API_KEY", "").strip()
+KLIKQRIS_MERCHANT_ID: str = os.getenv("KLIKQRIS_MERCHANT_ID", "").strip()
+KLIKQRIS_MODE: str = os.getenv("KLIKQRIS_MODE", "sandbox").strip().lower()
+
+KLIKQRIS_ACTIVE: bool = bool(KLIKQRIS_API_KEY) and bool(KLIKQRIS_MERCHANT_ID)

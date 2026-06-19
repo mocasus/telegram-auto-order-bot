@@ -36,6 +36,7 @@ from telegram.ext import (
 
 import config
 import db
+from payments import klikqris
 
 logger = logging.getLogger(__name__)
 
@@ -308,6 +309,7 @@ async def handle_confirm(
         f"{secrets.token_hex(2).upper()}"
     )
 
+    # 1) Simpan order (qris_ref NULL, akan di-set jika QRIS berhasil)
     try:
         db.create_order(
             order_id,
@@ -327,17 +329,58 @@ async def handle_confirm(
         )
         return ConversationHandler.END
 
-    text = (
-        f"✅ Order *#{order_id}* dibuat!\n"
-        "\n"
-        f"Total: Rp {format_rupiah(pending['total'])}\n"
-        f"Bayar ke *{config.PAYMENT_BANK}* "
-        f"`{config.PAYMENT_NUMBER}` a.n. *{config.PAYMENT_NAME}*.\n"
-        "Admin akan verifikasi setelah transfer. "
-        "Cek status di /myorders."
-    )
+    # 2) Coba buat QRIS via KlikQRIS (jika gateway aktif & terkonfigurasi)
+    qris_image_url: str | None = None
+    if klikqris.is_active():
+        try:
+            result = await klikqris.get().create_qris(
+                order_id=order_id,
+                amount=pending["total"],
+                keterangan=f"{product['name']} x{pending['quantity']}",
+            )
+            qris_data = result.get("data") or {}
+            qris_image_url = qris_data.get("qris_image")
+            db.set_order_qris_ref(order_id, order_id)
+            logger.info("QRIS created for %s", order_id)
+        except klikqris.KlikQRISError as e:
+            logger.warning("KlikQRIS gagal untuk %s: %s — fallback manual", order_id, e)
+        except Exception as e:
+            logger.exception("Unexpected error QRIS %s: %s", order_id, e)
+
     context.user_data.clear()
-    await query.edit_message_text(text, parse_mode=ParseMode.MARKDOWN)
+
+    # 3) Kirim QRIS photo (jika ada) atau info transfer manual
+    if qris_image_url:
+        caption = (
+            f"✅ Order *#{order_id}* dibuat!\n"
+            "\n"
+            f"{product['name']} x{pending['quantity']}\n"
+            f"Total: Rp {format_rupiah(pending['total'])}\n"
+            "\n"
+            "💳 Scan QR di atas untuk bayar via QRIS.\n"
+            "Bot auto-verifikasi begitu pembayaran masuk."
+        )
+        try:
+            await query.delete_message()
+        except Exception:
+            pass  # pesan sudah hilang / tidak bisa dihapus, abaikan
+        await context.bot.send_photo(
+            chat_id=user.id,
+            photo=qris_image_url,
+            caption=caption,
+            parse_mode=ParseMode.MARKDOWN,
+        )
+    else:
+        text = (
+            f"✅ Order *#{order_id}* dibuat!\n"
+            "\n"
+            f"Total: Rp {format_rupiah(pending['total'])}\n"
+            f"Bayar ke *{config.PAYMENT_BANK}* "
+            f"`{config.PAYMENT_NUMBER}` a.n. *{config.PAYMENT_NAME}*.\n"
+            "Admin akan verifikasi setelah transfer. "
+            "Cek status di /myorders."
+        )
+        await query.edit_message_text(text, parse_mode=ParseMode.MARKDOWN)
     return ConversationHandler.END
 
 

@@ -21,6 +21,7 @@
 - [Tentang](#tentang)
 - [Mulai Cepat](#mulai-cepat)
 - [Konfigurasi](#konfigurasi)
+- [Pembayaran (KlikQRIS)](#pembayaran-klikqris)
 - [Penggunaan](#penggunaan)
 - [Struktur Proyek](#struktur-proyek)
 - [Deploy](#deploy)
@@ -54,6 +55,19 @@ Semua via `.env`:
 | `PAYMENT_NAME` | tidak | `Moca` | Atas nama |
 | `SHOP_NAME` | tidak | `Toko Moca` | Nama toko |
 | `DB_PATH` | tidak | `data/bot.db` | Lokasi database |
+| `KLIKQRIS_API_KEY` | tidak | — | API key dari [KlikQRIS](https://klikqris.com) |
+| `KLIKQRIS_MERCHANT_ID` | tidak | — | Merchant ID KlikQRIS |
+| `KLIKQRIS_MODE` | tidak | `sandbox` | `sandbox` (testing) atau `production` |
+
+Isi 3 var KlikQRIS di atas untuk auto-generate QR di tiap order + auto-verify pembayaran. Kosongkan untuk fallback ke info transfer manual (admin verify sendiri).
+
+### Pembayaran (KlikQRIS)
+1. Daftar gratis di [klikqris.com](https://klikqris.com) (ada mode sandbox untuk testing tanpa uang sungguhan).
+2. Login dashboard → ambil **API Key** + **Merchant ID**.
+3. Isi ke `.env`, set `KLIKQRIS_MODE=sandbox` dulu untuk coba-coba.
+4. Ganti ke `production` kalau udah siap terima uang beneran.
+
+Flow: user order → bot generate QR → user scan & bayar → poller (tiap 10 detik) cek status → kalau sukses, order auto `paid` + user dapat notif. Expired/failed → auto `cancelled`.
 
 ### Penggunaan
 
@@ -84,6 +98,10 @@ telegram-auto-order-bot/
 ├── bot.py              # entry point
 ├── config.py           # load .env
 ├── db.py               # helper SQLite
+├── payments/
+│   └── klikqris.py     # client KlikQRIS API
+├── jobs/
+│   └── poller.py       # background QRIS status checker
 ├── handlers/
 │   ├── start.py        # /start, /help
 │   ├── product.py      # /katalog + order flow
@@ -124,6 +142,7 @@ MIT. Lihat [LICENSE](LICENSE).
 - [About](#about)
 - [Quick Start](#quick-start)
 - [Configuration](#configuration)
+- [Payment (KlikQRIS)](#payment-klikqris)
 - [Usage](#usage)
 - [Project Structure](#project-structure)
 - [Deploy](#deploy-1)
@@ -157,6 +176,19 @@ All via `.env`:
 | `PAYMENT_NAME` | no | `Moca` | Account holder |
 | `SHOP_NAME` | no | `Toko Moca` | Shop name |
 | `DB_PATH` | no | `data/bot.db` | Database location |
+| `KLIKQRIS_API_KEY` | no | — | API key from [KlikQRIS](https://klikqris.com) |
+| `KLIKQRIS_MERCHANT_ID` | no | — | KlikQRIS merchant ID |
+| `KLIKQRIS_MODE` | no | `sandbox` | `sandbox` (testing) or `production` |
+
+Fill the 3 KlikQRIS vars above to auto-generate a QR for each order + auto-verify payment. Leave empty to fall back to manual bank transfer info (admin verifies by hand).
+
+### Payment (KlikQRIS)
+1. Sign up free at [klikqris.com](https://klikqris.com) (sandbox mode available for testing without real money).
+2. Dashboard → grab **API Key** + **Merchant ID**.
+3. Put them in `.env`, set `KLIKQRIS_MODE=sandbox` first to try things out.
+4. Switch to `production` when you're ready to accept real payments.
+
+Flow: user orders → bot generates QR → user scans & pays → poller (every 10s) checks status → on success, order auto-marked `paid` + user notified. Expired/failed → auto `cancelled`.
 
 ### Usage
 
@@ -187,6 +219,10 @@ telegram-auto-order-bot/
 ├── bot.py              # entry point
 ├── config.py           # load .env
 ├── db.py               # SQLite helper
+├── payments/
+│   └── klikqris.py     # KlikQRIS API client
+├── jobs/
+│   └── poller.py       # background QRIS status checker
 ├── handlers/
 │   ├── start.py        # /start, /help
 │   ├── product.py      # /katalog + order flow
