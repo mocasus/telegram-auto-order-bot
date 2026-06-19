@@ -19,16 +19,32 @@
 
 ### Daftar Isi
 - [Tentang](#tentang)
+- [Fitur](#fitur)
 - [Mulai Cepat](#mulai-cepat)
 - [Konfigurasi](#konfigurasi)
 - [Pembayaran (KlikQRIS)](#pembayaran-klikqris)
+- [Cara Kerja](#cara-kerja)
 - [Penggunaan](#penggunaan)
+- [Tech Stack](#tech-stack)
 - [Struktur Proyek](#struktur-proyek)
 - [Deploy](#deploy)
+- [Roadmap](#roadmap)
 - [Lisensi](#lisensi)
 
 ### Tentang
-Bot Telegram buat jualan online. User lihat katalog, order, dapat info rekening. Admin tambah produk & ubah status order. Pakai SQLite, jalan di VPS kecil.
+Bot Telegram buat jualan online. User lihat katalog, order, dapat info rekening atau QRIS. Admin tambah produk & ubah status order. Pakai SQLite, jalan di VPS kecil.
+
+Cocok buat: toko kecil, reseller, jualan pribadi, testing, demo.
+
+### Fitur
+- 🛍️ Katalog produk via inline keyboard
+- 🛒 Order 3 langkah: pilih → jumlah → konfirmasi
+- 💳 Pembayaran QRIS via KlikQRIS (auto QR + auto-verify)
+- ⏰ Auto-cancel order kadaluarsa / gagal bayar
+- 📋 Riwayat order per user (`/myorders`)
+- 🔧 Admin: tambah/hapus produk, lihat order, ubah status, broadcast
+- 🗄️ SQLite single-file, tanpa setup DB server
+- 🚀 Deps minimal: 2 package (PTB + dotenv)
 
 ### Mulai Cepat
 ```bash
@@ -69,6 +85,18 @@ Isi 3 var KlikQRIS di atas untuk auto-generate QR di tiap order + auto-verify pe
 
 Flow: user order → bot generate QR → user scan & bayar → poller (tiap 10 detik) cek status → kalau sukses, order auto `paid` + user dapat notif. Expired/failed → auto `cancelled`.
 
+### Cara Kerja
+1. User `/katalog` → bot ambil produk dari DB
+2. User klik Beli → masukkan jumlah → klik Konfirmasi
+3. Bot panggil KlikQRIS `create_qris(order_id, total)` → dapat URL QR
+4. Bot kirim foto QR + detail order ke user
+5. User scan & bayar via app bank/e-wallet
+6. Poller (tiap 10 detik) panggil `check_status(order_id)`
+7. Status `paid` → update DB, notif user & admin
+8. Status `expired`/`failed` → update DB, notif user
+
+Kalau KlikQRIS non-aktif, step 3-4 diganti tampil info rekening manual. Admin verify sendiri di `/orders`.
+
 ### Penggunaan
 
 **User:**
@@ -91,6 +119,15 @@ Cara order: klik produk di katalog → masukkan jumlah → klik Konfirmasi. Bot 
 | `/delproduct <id>` | Hapus produk |
 | `/orders` | Lihat order + ubah status (Paid / Cancel) |
 | `/broadcast <pesan>` | Kirim pesan ke semua user |
+
+### Tech Stack
+| Komponen | Kenapa |
+|---|---|
+| Python 3.11 | Async bawaan, syntax modern |
+| python-telegram-bot v22 | Library resmi Telegram, async, stabil |
+| SQLite (stdlib) | Single file, tanpa server, cukup ribuan order |
+| KlikQRIS | QRIS langsung, murah, support sandbox |
+| python-dotenv | Config via `.env`, simple |
 
 ### Struktur Proyek
 ```
@@ -126,6 +163,14 @@ sudo journalctl -u telegram-auto-order-bot -f
 
 File `telegram-auto-order-bot.service` ada di repo. Edit `User=` dan `Documentation=` sesuai setup lo.
 
+### Roadmap
+- [ ] Multi-admin
+- [ ] Kategori produk
+- [ ] Export order ke Excel/CSV
+- [ ] Notifikasi admin tiap order masuk
+- [ ] Webhook KlikQRIS (selain polling)
+- [ ] Keranjang (opsional, toggle)
+
 ### Lisensi
 MIT. Lihat [LICENSE](LICENSE).
 
@@ -140,16 +185,32 @@ MIT. Lihat [LICENSE](LICENSE).
 
 ### Table of Contents
 - [About](#about)
+- [Features](#features)
 - [Quick Start](#quick-start)
 - [Configuration](#configuration)
 - [Payment (KlikQRIS)](#payment-klikqris)
+- [How It Works](#how-it-works)
 - [Usage](#usage)
+- [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
 - [Deploy](#deploy-1)
+- [Roadmap](#roadmap)
 - [License](#license)
 
 ### About
-Telegram bot for running a small shop. Users browse the catalog, place orders, and get bank transfer info. Admin adds products and marks orders as paid. SQLite under the hood, runs on a small VPS.
+Telegram bot for running a small shop. Users browse the catalog, place orders, and get bank transfer info or a QRIS code. Admin adds products and updates order status. SQLite under the hood, runs on a small VPS.
+
+Good for: small shops, resellers, personal selling, testing, demos.
+
+### Features
+- 🛍️ Product catalog via inline keyboard
+- 🛒 3-step order: pick → quantity → confirm
+- 💳 QRIS payment via KlikQRIS (auto QR + auto-verify)
+- ⏰ Auto-cancel expired / failed orders
+- 📋 Per-user order history (`/myorders`)
+- 🔧 Admin: add/remove products, view orders, change status, broadcast
+- 🗄️ SQLite single-file, no DB server needed
+- 🚀 Minimal deps: 2 packages (PTB + dotenv)
 
 ### Quick Start
 ```bash
@@ -190,6 +251,18 @@ Fill the 3 KlikQRIS vars above to auto-generate a QR for each order + auto-verif
 
 Flow: user orders → bot generates QR → user scans & pays → poller (every 10s) checks status → on success, order auto-marked `paid` + user notified. Expired/failed → auto `cancelled`.
 
+### How It Works
+1. User `/katalog` → bot fetches products from DB
+2. User clicks Buy → enters quantity → clicks Confirm
+3. Bot calls KlikQRIS `create_qris(order_id, total)` → gets QR URL
+4. Bot sends QR photo + order details to user
+5. User scans & pays via bank/e-wallet app
+6. Poller (every 10s) calls `check_status(order_id)`
+7. Status `paid` → update DB, notify user & admin
+8. Status `expired`/`failed` → update DB, notify user
+
+When KlikQRIS is inactive, steps 3-4 are replaced with manual bank info. Admin verifies manually in `/orders`.
+
 ### Usage
 
 **User:**
@@ -212,6 +285,15 @@ Order flow: click a product in the catalog → enter quantity → click Confirm.
 | `/delproduct <id>` | Delete a product |
 | `/orders` | View orders + change status (Paid / Cancel) |
 | `/broadcast <message>` | Send a message to all users |
+
+### Tech Stack
+| Component | Why |
+|---|---|
+| Python 3.11 | Built-in async, modern syntax |
+| python-telegram-bot v22 | Official Telegram library, async, stable |
+| SQLite (stdlib) | Single file, no server, handles thousands of orders |
+| KlikQRIS | Direct QRIS, cheap, supports sandbox |
+| python-dotenv | Config via `.env`, simple |
 
 ### Project Structure
 ```
@@ -246,6 +328,14 @@ sudo journalctl -u telegram-auto-order-bot -f
 ```
 
 File `telegram-auto-order-bot.service` is included. Edit `User=` and `Documentation=` for your setup.
+
+### Roadmap
+- [ ] Multi-admin
+- [ ] Product categories
+- [ ] Export orders to Excel/CSV
+- [ ] Admin notification per new order
+- [ ] KlikQRIS webhook (in addition to polling)
+- [ ] Shopping cart (optional, toggle)
 
 ### License
 MIT. See [LICENSE](LICENSE).
