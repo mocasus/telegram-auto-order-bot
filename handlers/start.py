@@ -21,7 +21,7 @@ import db
 logger = logging.getLogger(__name__)
 
 
-async def register(app: Application) -> None:
+def register(app: Application) -> None:
     """Register the /start, /help, and /menu command handlers on the app."""
     app.add_handler(CommandHandler("start", cmd_start))
     app.add_handler(CommandHandler("help", cmd_help))

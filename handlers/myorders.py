@@ -26,7 +26,7 @@ _STATUS_EMOJI: dict[str, str] = {
 }
 
 
-async def register(app) -> None:
+def register(app) -> None:
     """Daftarkan CommandHandler untuk /myorders dan alias /pesanan."""
     app.add_handler(CommandHandler("myorders", cmd_myorders))
     app.add_handler(CommandHandler("pesanan", cmd_myorders))

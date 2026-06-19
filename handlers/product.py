@@ -67,7 +67,7 @@ def format_rupiah(n: int) -> str:
 # ---------------------------------------------------------------------------
 
 
-async def register(app: Application) -> None:
+def register(app: Application) -> None:
     """Register the /katalog command and the order ConversationHandler."""
     app.add_handler(CommandHandler("katalog", cmd_katalog))
 

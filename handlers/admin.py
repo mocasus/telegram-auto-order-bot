@@ -80,7 +80,7 @@ def format_rupiah(n: int) -> str:
 # ---------------------------------------------------------------------------
 
 
-async def register(app: Application) -> None:
+def register(app) -> None:
     """Register every admin handler on the supplied ``Application``."""
 
     conv_addproduct = ConversationHandler(
