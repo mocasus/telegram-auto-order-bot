@@ -47,35 +47,25 @@ Cocok buat: toko kecil, reseller, jualan pribadi, testing, demo.
 - 🚀 Deps minimal: 2 package (PTB + dotenv)
 
 ### Mulai Cepat
+Butuh: Python 3.11+. Token dari [@BotFather](https://t.me/BotFather), admin ID dari [@userinfobot](https://t.me/userinfobot).
+
 ```bash
 git clone https://github.com/mocasus/telegram-auto-order-bot.git
 cd telegram-auto-order-bot
-python3 -m venv venv && source venv/bin/activate
-pip install -r requirements.txt
-cp .env.example .env
-nano .env   # isi TELEGRAM_BOT_TOKEN, ADMIN_USER_ID, info rekening
-python bot.py
+cp .env.example .env && nano .env
+python3 -m venv venv && venv/bin/pip install -r requirements.txt
+venv/bin/python bot.py
 ```
 
-Butuh: Python 3.11+, token dari [@BotFather](https://t.me/BotFather), user ID admin dari [@userinfobot](https://t.me/userinfobot).
-
 ### Konfigurasi
-Semua via `.env`:
+Edit `.env`. Yang wajib:
 
-| Var | Wajib | Default | Keterangan |
-|---|---|---|---|
-| `TELEGRAM_BOT_TOKEN` | ya | — | Token dari @BotFather |
-| `ADMIN_USER_ID` | ya | — | User ID admin Telegram |
-| `PAYMENT_BANK` | tidak | `BCA` | Nama bank / e-wallet |
-| `PAYMENT_NUMBER` | tidak | `123-456-789` | Nomor rekening |
-| `PAYMENT_NAME` | tidak | `Moca` | Atas nama |
-| `SHOP_NAME` | tidak | `Toko Moca` | Nama toko |
-| `DB_PATH` | tidak | `data/bot.db` | Lokasi database |
-| `KLIKQRIS_API_KEY` | tidak | — | API key dari [KlikQRIS](https://klikqris.com) |
-| `KLIKQRIS_MERCHANT_ID` | tidak | — | Merchant ID KlikQRIS |
-| `KLIKQRIS_MODE` | tidak | `sandbox` | `sandbox` (testing) atau `production` |
+| Var | Keterangan |
+|---|---|
+| `TELEGRAM_BOT_TOKEN` | Token dari @BotFather |
+| `ADMIN_USER_ID` | User ID admin dari @userinfobot |
 
-Isi 3 var KlikQRIS di atas untuk auto-generate QR di tiap order + auto-verify pembayaran. Kosongkan untuk fallback ke info transfer manual (admin verify sendiri).
+Var lain (info rekening, KlikQRIS, nama toko) lihat `.env.example` — sudah ada komentar & default.
 
 ### Pembayaran (KlikQRIS)
 1. Daftar gratis di [klikqris.com](https://klikqris.com) (ada mode sandbox untuk testing tanpa uang sungguhan).
@@ -213,35 +203,25 @@ Good for: small shops, resellers, personal selling, testing, demos.
 - 🚀 Minimal deps: 2 packages (PTB + dotenv)
 
 ### Quick Start
+Requires: Python 3.11+. Token from [@BotFather](https://t.me/BotFather), admin ID from [@userinfobot](https://t.me/userinfobot).
+
 ```bash
 git clone https://github.com/mocasus/telegram-auto-order-bot.git
 cd telegram-auto-order-bot
-python3 -m venv venv && source venv/bin/activate
-pip install -r requirements.txt
-cp .env.example .env
-nano .env   # fill TELEGRAM_BOT_TOKEN, ADMIN_USER_ID, bank info
-python bot.py
+cp .env.example .env && nano .env
+python3 -m venv venv && venv/bin/pip install -r requirements.txt
+venv/bin/python bot.py
 ```
 
-Requires: Python 3.11+, token from [@BotFather](https://t.me/BotFather), admin user ID from [@userinfobot](https://t.me/userinfobot).
-
 ### Configuration
-All via `.env`:
+Edit `.env`. Required:
 
-| Var | Required | Default | Description |
-|---|---|---|---|
-| `TELEGRAM_BOT_TOKEN` | yes | — | Token from @BotFather |
-| `ADMIN_USER_ID` | yes | — | Telegram admin user ID |
-| `PAYMENT_BANK` | no | `BCA` | Bank / e-wallet name |
-| `PAYMENT_NUMBER` | no | `123-456-789` | Account number |
-| `PAYMENT_NAME` | no | `Moca` | Account holder |
-| `SHOP_NAME` | no | `Toko Moca` | Shop name |
-| `DB_PATH` | no | `data/bot.db` | Database location |
-| `KLIKQRIS_API_KEY` | no | — | API key from [KlikQRIS](https://klikqris.com) |
-| `KLIKQRIS_MERCHANT_ID` | no | — | KlikQRIS merchant ID |
-| `KLIKQRIS_MODE` | no | `sandbox` | `sandbox` (testing) or `production` |
+| Var | Description |
+|---|---|
+| `TELEGRAM_BOT_TOKEN` | Token from @BotFather |
+| `ADMIN_USER_ID` | Admin user ID from @userinfobot |
 
-Fill the 3 KlikQRIS vars above to auto-generate a QR for each order + auto-verify payment. Leave empty to fall back to manual bank transfer info (admin verifies by hand).
+For other vars (bank info, KlikQRIS, shop name) see `.env.example` — comments & defaults included.
 
 ### Payment (KlikQRIS)
 1. Sign up free at [klikqris.com](https://klikqris.com) (sandbox mode available for testing without real money).
