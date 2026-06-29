@@ -6,8 +6,12 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.11+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python">
-  <img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" alt="License">
+  <img src="https://img.shields.io/github/license/mocasus/telegram-auto-order-bot?style=flat-square&color=2ea44f" alt="License">
+  <img src="https://img.shields.io/github/stars/mocasus/telegram-auto-order-bot?style=flat-square&color=ffd700" alt="Stars">
+  <img src="https://img.shields.io/github/last-commit/mocasus/telegram-auto-order-bot?style=flat-square&color=8b5cf6" alt="Last commit">
+  <img src="https://img.shields.io/github/repo-size/mocasus/telegram-auto-order-bot?style=flat-square&color=26a5e4" alt="Repo size">
   <a href="https://t.me/mmocaauto_bot"><img src="https://img.shields.io/badge/Demo-@mmocaauto_bot-2CA5E0?style=flat-square&logo=telegram&logoColor=white" alt="Demo"></a>
+  <img src="https://img.shields.io/badge/Status-Production-2ea44f?style=flat-square" alt="Status">
 </p>
 
 ---
